@@ -1,0 +1,336 @@
+
+
+
+
+lpwan                                                         S. Farrell
+Internet-Draft                                    Trinity College Dublin
+Intended status: Informational                                  A. Yegin
+Expires: April 7, 2017                                          Actility
+                                                         October 4, 2016
+
+
+                            LoRaWAN Overview
+                  draft-farrell-lpwan-lora-overview-00
+
+Abstract
+
+   Low Power Wide Area Networks (LPWAN) are wireless technologies
+   covering different Internet of Things (IoT) applications.  The common
+   characteristics for LPWANs are large coverage, low bandwidth, small
+   packet and application layer data sizes and long battery life
+   operation.  One of these technologies is LoRaWAN developed by the
+   LoRaWAN Alliance.  LoRaWAN targets key requirements of the Internet
+   of things such as secure bi-directional communication, mobility and
+   localization services.  This document is an informational overview of
+   LoRaWAN and gives the principal characteristics and restrictions of
+   this technology in order to help with the IETF work for providing
+   IPv6 connectivity over LoRaWAN along with other LPWANs.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on April 7, 2017.
+
+Copyright Notice
+
+   Copyright (c) 2016 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+
+
+
+Farrell & Yegin           Expires April 7, 2017                 [Page 1]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Requirements Language . . . . . . . . . . . . . . . . . . . .   3
+   3.  Overview of LoRaWAN Technology  . . . . . . . . . . . . . . .   3
+   4.  Spectrum  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   5.  MAC Layer . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   6.  Addressing  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   4
+   10. Implementation Status . . . . . . . . . . . . . . . . . . . .   4
+     10.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .   5
+   11. Informative References  . . . . . . . . . . . . . . . . . . .   6
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   6
+
+1.  Introduction
+
+   [[Comments to be addressed before publication are in double square
+   brackets like this one]]
+
+   LoRaWAN is a wireless technology for long-range low-power low-data-
+   rate applications developed by Semtech, which is used in LoRaWAN
+   networks.  LoRaWAN networks typically are organized in a star-of-
+   stars topology in which gateways relay messages between end-devices
+   and a central network server in the backend.  Gateways are connected
+   to the network server via IP links while end-devices use single-hop
+   LoRaWAN communication to one or many gateways.  All communication is
+   generally bi-directional, although uplink communication from end-
+   devices to the network server are strongly favoured.
+
+   Communication between end-devices and gateways is spread out among
+   different frequency channels and so-called spreading factors.
+   Selecting a spreading factor is a trade-off between required link
+   budget and data rate.  Spreading factors create virtual and
+   orthogonal non-interfering communication channels that enable
+   simultaneous transmissions.  Depending on the used spreading factor,
+   LoRaWAN data rates range from 0.3 kbps to 50 kbps.  To maximize both
+   battery life of end-devices and overall network capacity, the LoRaWAN
+   network infrastructure manages the data rate and RF output for each
+
+
+
+Farrell & Yegin           Expires April 7, 2017                 [Page 2]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   end-device individually by means of an adaptive data rate (ADR)
+   scheme.  End-devices may transmit on any channel available at any
+   time, using any available data rate.
+
+   The consolidation of that technology and its important impact in the
+   M2M market, is triggering the need for end to end IP connectivity
+   from end devices to the backend server without the need of proxying
+   roles taken at Gateways.  Due to the constrained nature of LoRaWAN
+   devices, the compression techniques developed by 6LowPAN become
+   mandatory.  The present document specifies how IPv6 and the 6LowPAN
+   architecture run on top of the LoRaWAN MAC layer.
+
+2.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+3.  Overview of LoRaWAN Technology
+
+   Briefly describe the technology.  Phy layer and modulation.  MAC
+   operation and frame formats.
+
+   Figure 1: LoRaWAN Class A transmission and reception window.
+
+   |----------------------------|         |--------|     |--------|
+   |             Tx             |         |   Rx   |     |   Rx   |
+   |----------------------------|         |--------|     |--------|
+                                |---------|
+                                 Rx delay 1
+                                |------------------------|
+                                 Rx delay 2
+
+4.  Spectrum
+
+5.  MAC Layer
+
+6.  Addressing
+
+   The DevEUI is a global end-device ID in IEEE EUI64 address space that
+   uniquely identifies the end-device.  The DevEUI is preconfigured at
+   each node.
+
+   A LoRaWAN device addressing can be conducted in two ways.  Over the
+   air activation (OTAA) and Activation by personalization (ABP).  The
+   former requires 2 MAC layer messages to establish the network address
+   and security keys (join-request and join-response).  The latter
+   assumes that device address and security keys are pre-programmed at
+
+
+
+Farrell & Yegin           Expires April 7, 2017                 [Page 3]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   the nodes and the DevEUI is not mandatory.  Lately, the LoRaWAN
+   Alliance is considering to mandate DevEUI in ABP mode.
+
+   Figure 3: DevEUI
+
+   +------------+----------------+
+   |  Bit#      |    [63..0]     |
+   +------------+----------------+
+   | DevEUI     |     DevEUI     |
+   +------------+----------------+
+
+7.  Security Considerations
+
+   The transmission of IPv6 over LoRaWAN links has similar requirements
+   and concerns for security as for IEEE 802.15.4.  LoRaWAN Link Layer
+   security considerations are covered by the LoRaWAN Specification
+   [LoRaSpec].
+
+8.  IANA Considerations
+
+   There are no IANA considerations related to this document.
+
+9.  Acknowledgements
+
+   The authors re-used some text from [I-D.vilajosana-lpwan-lora-hc]
+
+10.  Implementation Status
+
+   This section records the status of known implementations of the
+   protocol defined by this specification at the time of posting of this
+   Internet-Draft, and is based on a proposal described in RFC 7942
+   [RFC7942].  The description of implementations in this section is
+   intended to assist the IETF in its decision processes in progressing
+   drafts to RFCs.  Please note that the listing of any individual
+   implementation here does not imply endorsement by the IETF.
+   Furthermore, no effort has been spent to verify the information
+   presented here that was supplied by IETF contributors.  This is not
+   intended as, and must not be construed to be, a catalog of available
+   implementations or their features.  Readers are advised to note that
+   other implementations may exist.
+
+   According to RFC 7942, "this will allow reviewers and working groups
+   to assign due consideration to documents that have the benefit of
+   running code, which may serve as evidence of valuable experimentation
+   and feedback that have made the implemented protocols more mature.
+   It is up to the individual working groups to use this information as
+   they see fit".
+
+
+
+
+Farrell & Yegin           Expires April 7, 2017                 [Page 4]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   There are a range of commercial and open-source implementations of
+   LoRAWAN nodes and components.
+
+   [[Doubtless more and some more details TBD if we keep this section]]
+
+   RFC 7942 calls for this information for each implementation if that's
+   useful to provide:
+
+   o  The organization responsible for the implementation, if any.
+
+   o  The implementation's name and/or a link to a web page where the
+      implementation or a description of it can be found.
+
+   o  A brief general description.
+
+   o  The implementation's level of maturity: research, prototype,
+      alpha, beta, production, widely used, etc.
+
+   o  Coverage: which parts of the protocol specification are
+      implemented.
+
+   o  Version compatibility: what version/versions of the Internet Draft
+      are known to be implemented.
+
+   o  Licensing: the terms under which the implementation can be used.
+      For example: proprietary, royalty licensing, freely distributable
+      with acknowledgement (BSD style), freely distributable with
+      requirement to redistribute source (General Public License (GPL)
+      style), and other (specify).
+
+   o  Implementation experience: any useful information the implementers
+      want to share with the community.
+
+   o  Contact information: ideally a person's name and email address,
+      but possibly just a URL or mailing list.
+
+   o  The date when information about this particular implementation was
+      last updated.
+
+10.1.  LoRAMac-node
+
+   There is a BSD Licensed implementation of the LoRaWAN MAC layer at
+   <https://github.com/Lora-net/LoRaMac-node>.
+
+
+
+
+
+
+
+
+Farrell & Yegin           Expires April 7, 2017                 [Page 5]
+
+Internet-Draft                lora overview                 October 2016
+
+
+11.  Informative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, DOI 10.17487/RFC7942, July 2016,
+              <http://www.rfc-editor.org/info/rfc7942>.
+
+   [I-D.vilajosana-lpwan-lora-hc]
+              Vilajosana, X., Dohler, M., and A. Yegin, "Transmission of
+              IPv6 Packets over LoRaWAN", draft-vilajosana-lpwan-lora-
+              hc-00 (work in progress), July 2016.
+
+   [LoRaSpec]
+              LoRa Alliance, "LoRaWAN Specification Version V1.0",
+              January 2015, <https://www.lora-
+              alliance.org/portals/0/specs/
+              LoRaWAN%20Specification%201R0.pdf>.
+
+Authors' Addresses
+
+   Stephen Farrell
+   Trinity College Dublin
+   Dublin  2
+   Ireland
+
+   Phone: +353-1-896-2354
+   Email: stephen.farrell@cs.tcd.ie
+
+
+   Alper Yegin
+   Actility
+   Paris, Paris
+   FR
+
+   Email: alper.yegin@actility.com
+
+
+
+
+
+
+
+
+
+
+
+Farrell & Yegin           Expires April 7, 2017                 [Page 6]
