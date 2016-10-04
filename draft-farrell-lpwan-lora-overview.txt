@@ -5,8 +5,8 @@
 lpwan                                                         S. Farrell
 Internet-Draft                                    Trinity College Dublin
 Intended status: Informational                                  A. Yegin
-Expires: April 7, 2017                                          Actility
-                                                         October 4, 2016
+Expires: April 8, 2017                                          Actility
+                                                         October 5, 2016
 
 
                             LoRaWAN Overview
@@ -19,9 +19,9 @@ Abstract
    characteristics for LPWANs are large coverage, low bandwidth, small
    packet and application layer data sizes and long battery life
    operation.  One of these technologies is LoRaWAN developed by the
-   LoRaWAN Alliance.  LoRaWAN targets key requirements of the Internet
-   of things such as secure bi-directional communication, mobility and
-   localization services.  This document is an informational overview of
+   LoRa Alliance.  LoRaWAN targets key requirements of the Internet of
+   things such as secure bi-directional communication, mobility and
+   localization services.  This memo is an informational overview of
    LoRaWAN and gives the principal characteristics and restrictions of
    this technology in order to help with the IETF work for providing
    IPv6 connectivity over LoRaWAN along with other LPWANs.
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 7, 2017.
+   This Internet-Draft will expire on April 8, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Farrell & Yegin           Expires April 7, 2017                 [Page 1]
+Farrell & Yegin           Expires April 8, 2017                 [Page 1]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -70,49 +70,54 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   3.  Spectrum  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   4.  Framing . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  Spectrum  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   4.  PHY . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
    5.  MAC Layer . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   6.  Addressing  . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
-   10. Implementation Status . . . . . . . . . . . . . . . . . . . .   5
-     10.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .   6
-   11. Informative References  . . . . . . . . . . . . . . . . . . .   6
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   7
+   6.  Addressing  . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   7.  Planned Changes . . . . . . . . . . . . . . . . . . . . . . .   5
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
+   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
+   11. Implementation Status . . . . . . . . . . . . . . . . . . . .   6
+     11.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .   7
+   12. Informative References  . . . . . . . . . . . . . . . . . . .   8
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
 
    [[Comments to be addressed before publication are in double square
    brackets like this one]]
 
+   [[As on 20161004 SF got to ~page16 of LoRaSpec, I'm working down that
+   and extracting bits of interest to the various sections here.]]
+
    LoRaWAN is a wireless technology for long-range low-power low-data-
-   rate applications developed by the LoRa Alliance.  <https://www.lora-
-   alliance.org/> LoRaWAN networks are typically organized in a star-of-
-   stars topology in which gateways relay messages between end-devices
-   and a central "network server" in the backend.  Gateways are
-   connected to the network server via IP links while end-devices use
-   single-hop LoRaWAN communication that can be received at one or more
-   gateways.  All communication is generally bi-directional, although
-   uplink communication from end-devices to the network server are
-   favoured in terms of overall bandwidth availability.
+   rate applications developed by the LoRa Alliance, a pay-for-
+   membership consortium.  <https://www.lora-alliance.org/> LoRaWAN
+   networks are typically organized in a star-of-stars topology in which
+   gateways relay messages between end-devices and a central "network
+   server" in the backend.  Gateways are connected to the network server
+   via IP links while end-devices use single-hop LoRaWAN communication
+   that can be received at one or more gateways.  All communication is
+   generally bi-directional, although uplink communication from end-
+   devices to the network server are favoured in terms of overall
+   bandwidth availability.
 
    Communication between end-devices and gateways uses different
    frequencies and so-called spreading factors.  [[Needs better
    explanation.]] Selecting a spreading factor is a trade-off between
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 2]
+
+Internet-Draft                lora overview                 October 2016
+
+
    required link budget and data rate.  Spreading factors create virtual
    and orthogonal non-interfering communication channels that enable
    simultaneous transmissions.  Depending on the used spreading factor,
    LoRaWAN data rates range from 0.3 kbps to 50 kbps.
-
-
-
-
-Farrell & Yegin           Expires April 7, 2017                 [Page 2]
-
-Internet-Draft                lora overview                 October 2016
-
 
    To maximize both battery life of end-devices and overall network
    capacity, the LoRaWAN network infrastructure manages the data rate
@@ -121,7 +126,7 @@ Internet-Draft                lora overview                 October 2016
    previous sentence.]] End-devices may transmit on any channel
    available at any time, using any available data rate.
 
-   This document provides an overview of the LoRaWAN technology for the
+   This memo provides an overview of the LoRaWAN technology for the
    Internet community, but the definitive specification [LoRaSpec] is
    that produced by the LoRa Alliance.  [[What is the right version on
    which to base this?  I'm using 1.0.1 from Feb 2016 for now.  Is that
@@ -129,10 +134,10 @@ Internet-Draft                lora overview                 October 2016
 
 2.  Terminology
 
-   [[Not sure if this'll be needed.  Leave it here for now.]] The key
-   words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-   "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document
-   are to be interpreted as described in RFC 2119 [RFC2119].
+   [[Not sure if 2119 terms will be needed.  Leave it here for now.]]
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
 
    This section introduces some LoRaWAN terms.
 
@@ -144,6 +149,29 @@ Internet-Draft                lora overview                 October 2016
       the Internet, with a network server. [[one only?]]
 
    o  Network Server: [[does stuff]]
+
+   o  Classes A, B and C are classes of end-device.  All LoRaWAN devices
+      have bi-directional radios.  The minimal end-device is class A and
+      all devices need to support acting as a class A device.  Class B
+      have additional end-device receive slots allocated for better
+      gateway to end-device bandwidth.  Class C end-devices can receive
+      at any time they are not sending and hence have even better
+      inbound (to end-device) bandwidth.  Classes B and C are not
+      further discussed in this memo.  [[Are these really classes of
+      device or modes of operation?]]
+
+   o  Uplink message: refers to communications from end-device to
+      network server via one or more gateways.
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 3]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   o  Downlink message: refers to communications from network server via
+      one gateway to a single end-device.
 
 3.  Spectrum
 
@@ -159,21 +187,18 @@ Internet-Draft                lora overview                 October 2016
    The end-device changes channel in a pseudo-random fashion for every
    transmission to help make the system more robust to interference.
 
+4.  PHY
 
+   Figure 1 below shows that after a transmission slot a Class A device
+   turns on its receiver for two short receive windows that are offset
+   from the end of the transmission window.  The frequencies and data
+   rate chosen for these receive windows depend on those used for the
+   transmit window.  If a downlink message preamble is detected during a
+   receive window, then the end-device keeps the radio on in order to
+   reeive the frame.
 
-
-
-
-
-Farrell & Yegin           Expires April 7, 2017                 [Page 3]
-
-Internet-Draft                lora overview                 October 2016
-
-
-4.  Framing
-
-   Briefly describe the technology.  Phy layer and modulation.  MAC
-   operation and frame formats.
+   End-devices can only transmit a 2nd uplink frame after the end of the
+   associated receive windows.
 
    Figure 1: LoRaWAN Class A transmission and reception window.
 
@@ -187,14 +212,31 @@ Internet-Draft                lora overview                 October 2016
 
 5.  MAC Layer
 
+   Uplink and downlink higher layer data is carried in a MACPayload.
+   There is a concept of "ports" (an optional 8 bit value) to handle
+   different applications on an end-device.  The header also
+   distinguishes different directions and whether or not an
+   acknowledgement ("confirmation") is required from the peer.
+
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 4]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   In addition to carrying higher layer PDUs there are Join-Request and
+   Join-Response (aka Join-Accept) messages for handling network access.
+
 6.  Addressing
 
    The DevEUI is a global end-device ID in IEEE EUI64 address space that
    uniquely identifies the end-device.  The DevEUI is preconfigured at
    each node.
 
-   A LoRaWAN device addressing can be conducted in two ways.  Over the
-   air activation (OTAA) and Activation by personalization (ABP).  The
+   Device addressing is done in one of two ways.  Over-the-air
+   activation (OTAA) and Activation by personalization (ABP).  The
    former requires 2 MAC layer messages to establish the network address
    and security keys (join-request and join-response).  The latter
    assumes that device address and security keys are pre-programmed at
@@ -209,28 +251,68 @@ Internet-Draft                lora overview                 October 2016
    | DevEUI     |     DevEUI     |
    +------------+----------------+
 
-7.  Security Considerations
+   Once a device has joined the network, then a short device address
+   ("DevAddr", a 32 bit locally assigned value) is used in MAC layer
+   messages.
 
-   [[TBD, explain keying, provisioning and roaming]]
+7.  Planned Changes
 
-8.  IANA Considerations
+   As with many LPWAN technologies LoRaWAN is constantly evolving both
+   in details and in the large.  For example, some detailed changes to
+   the cryptography used are being discussed within the LoRa Alliance.
+   Whether or not those result in backawards incompatible changes
+   (things that affect ciphertext usually do), will be apparent in the
+   the latest LoRaWAN specification.
 
-   There are no IANA considerations related to this document.
+   Various LoRaWAN message formats including the MAC layer have bits
+   allocated that would allow for future changes to formats.  In such
+   cases, gateways and network-servers will be expected to support
+   earlier releases, whereas end-devices may only support one version.
+
+   There is also some scope for vendor-specific ("proprietary")
+   extensions to MAC layer messages.
+
+   Larger changes are being considered in terms of connecting together
+   multiple networks and allowing end-devices to roam over different
 
 
 
-
-
-Farrell & Yegin           Expires April 7, 2017                 [Page 4]
+Farrell & Yegin           Expires April 8, 2017                 [Page 5]
 
 Internet-Draft                lora overview                 October 2016
 
 
-9.  Acknowledgements
+   networks.  These changes are expected to become stable in 2017.
+   [[Just a guess, maybe we don't want to say stuff like that, but no
+   harm to let folks know roughly what's likely to change in the
+   lifetime of the LPWAN WG.]]
+
+8.  Security Considerations
+
+   [[TBD, explain keying, provisioning and roaming]]
+
+   All MAC layer messages have an outer 32-bit Message Integrity Code
+   (MIC) calculated using AES-CMAC calculated over the payload
+   (ciphertext).
+
+   [[LoRaWAN has no built-in s/w update.  That's a risk.  And one it'd
+   be good to try fix in general.  I can imageine that might be a wrench
+   for some folks.]]
+
+   [[Describe privacy issues.]]
+
+9.  IANA Considerations
+
+   There are no IANA considerations related to this memo.
+
+10.  Acknowledgements
 
    The authors re-used some text from [I-D.vilajosana-lpwan-lora-hc]
 
-10.  Implementation Status
+   Stephen Farrell's work on this memo was supported by the Science
+   Foundation Ireleand funded CONNECT centre.
+
+11.  Implementation Status
 
    This section records the status of known implementations of the
    protocol defined by this specification at the time of posting of this
@@ -248,6 +330,14 @@ Internet-Draft                lora overview                 October 2016
    According to RFC 7942, "this will allow reviewers and working groups
    to assign due consideration to documents that have the benefit of
    running code, which may serve as evidence of valuable experimentation
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 6]
+
+Internet-Draft                lora overview                 October 2016
+
+
    and feedback that have made the implemented protocols more mature.
    It is up to the individual working groups to use this information as
    they see fit".
@@ -273,15 +363,6 @@ Internet-Draft                lora overview                 October 2016
    o  Coverage: which parts of the protocol specification are
       implemented.
 
-
-
-
-
-Farrell & Yegin           Expires April 7, 2017                 [Page 5]
-
-Internet-Draft                lora overview                 October 2016
-
-
    o  Version compatibility: what version/versions of the Internet Draft
       are known to be implemented.
 
@@ -300,12 +381,20 @@ Internet-Draft                lora overview                 October 2016
    o  The date when information about this particular implementation was
       last updated.
 
-10.1.  LoRAMac-node
+11.1.  LoRAMac-node
 
    There is a BSD Licensed implementation of the LoRaWAN MAC layer at
    <https://github.com/Lora-net/LoRaMac-node>.
 
-11.  Informative References
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 7]
+
+Internet-Draft                lora overview                 October 2016
+
+
+12.  Informative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -326,17 +415,6 @@ Internet-Draft                lora overview                 October 2016
               LoRa Alliance, "LoRaWAN Specification Version V1.0.1", Feb
               2016, <https://www.lora-alliance.org/portals/0/specs/
               LoRaWAN%20Specification%201R0.pdf>.
-
-
-
-
-
-
-
-Farrell & Yegin           Expires April 7, 2017                 [Page 6]
-
-Internet-Draft                lora overview                 October 2016
-
 
 Authors' Addresses
 
@@ -367,26 +445,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Farrell & Yegin           Expires April 7, 2017                 [Page 7]
+Farrell & Yegin           Expires April 8, 2017                 [Page 8]

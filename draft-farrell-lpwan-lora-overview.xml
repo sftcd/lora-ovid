@@ -49,18 +49,17 @@
    <workgroup>lpwan</workgroup>
    <keyword>Draft</keyword>
    <abstract>
-      <t>Low Power Wide Area Networks (LPWAN) are wireless technologies
-   covering different Internet of Things (IoT) applications.  The common
-   characteristics for LPWANs are large coverage, low bandwidth, small
-   packet and application layer data sizes and long battery life operation.  
-   One of these
-   technologies is LoRaWAN developed
-   by the LoRaWAN Alliance.  
- LoRaWAN targets key requirements of the Internet of things such as secure bi-directional communication, mobility and localization services. 
-   This document is an informational overview
-   of LoRaWAN and gives the principal characteristics and restrictions of
-   this technology in order to help with the IETF work for providing
-   IPv6 connectivity over LoRaWAN along with other LPWANs.
+
+	  <t>Low Power Wide Area Networks (LPWAN) are wireless technologies
+covering different Internet of Things (IoT) applications.  The common
+characteristics for LPWANs are large coverage, low bandwidth, small packet and
+application layer data sizes and long battery life operation.  One of these
+technologies is LoRaWAN developed by the LoRa Alliance.  LoRaWAN targets key
+requirements of the Internet of things such as secure bi-directional
+communication, mobility and localization services.  This memo is an
+informational overview of LoRaWAN and gives the principal characteristics and
+restrictions of this technology in order to help with the IETF work for
+providing IPv6 connectivity over LoRaWAN along with other LPWANs.
 
       </t>
    </abstract>
@@ -72,18 +71,19 @@
 	<t>[[Comments to be addressed before publication are in double square
 brackets like this one]]</t>
 
+	<t>[[As on 20161004 SF got to ~page16 of LoRaSpec, I'm working down
+that and extracting bits of interest to the various sections here.]]</t>
+
 	  <t> LoRaWAN is a wireless technology for long-range low-power
-low-data-rate applications developed by the LoRa Alliance. 
-<eref target="https://www.lora-alliance.org/"/>
-LoRaWAN networks are typically organized in a star-of-stars topology
-in which gateways relay messages between end-devices and a central "network
-server" in the backend. Gateways are connected to the network server via IP
-links while end-devices use single-hop LoRaWAN communication that can be
-received at one or more
-gateways. All communication is generally bi-directional, although uplink
-communication from end-devices to the network server are favoured in
-terms of overall bandwidth availability.
-</t>
+low-data-rate applications developed by the LoRa Alliance, a pay-for-membership
+consortium.  <eref target="https://www.lora-alliance.org/"/> LoRaWAN networks
+are typically organized in a star-of-stars topology in which gateways relay
+messages between end-devices and a central "network server" in the backend.
+Gateways are connected to the network server via IP links while end-devices use
+single-hop LoRaWAN communication that can be received at one or more gateways.
+All communication is generally bi-directional, although uplink communication
+from end-devices to the network server are favoured in terms of overall
+bandwidth availability.  </t>
 
 	  <t> Communication between end-devices and gateways uses
 different frequencies and so-called spreading factors. 
@@ -102,7 +102,7 @@ end-device individually by means of an adaptive data rate (ADR) scheme.
 End-devices may transmit on any channel available at any time, using any
 available data rate.  </t>
 
-<t>This document provides an overview of the LoRaWAN technology for
+<t>This memo provides an overview of the LoRaWAN technology for
 the Internet community, but
 the definitive specification 
       <xref target="LoRaSpec"/>
@@ -114,7 +114,7 @@ that public?]]</t>
 
 	<section title="Terminology">
 
-	  <t> [[Not sure if this'll be needed. Leave it here for now.]] The key
+	  <t> [[Not sure if 2119 terms will be needed. Leave it here for now.]] The key
 words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
 NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t> 
@@ -129,6 +129,21 @@ interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t>
 	Communicates with gateways and, via the Internet, with a network server. [[one only?]]</t>
 
 	<t>Network Server: [[does stuff]]</t>
+
+	<t>Classes A, B and C are classes of end-device. All LoRaWAN devices have
+bi-directional radios. The minimal end-device is class A and all devices need
+to support acting as a class A device. Class B have additional end-device
+receive slots allocated for better gateway to end-device bandwidth. Class C
+end-devices can receive at any time they are not sending and hence have even
+better inbound (to end-device) bandwidth. Classes B and C are not further 
+discussed in this memo. [[Are these really classes of device
+or modes of operation?]]</t>
+
+	<t>Uplink message: refers to communications from end-device to network server via one or
+more gateways. </t>
+
+	<t>Downlink message: refers to communications from network server via one gateway to a single
+end-device. </t>
 
 </list></t>
 
@@ -150,10 +165,22 @@ transmission to help make the system more robust to interference.</t>
 
 	</section>
 
-   <section title="Framing">
+   <section title="PHY">
+
       <t>
-       Briefly describe the technology. Phy layer and modulation. MAC operation and frame formats.
-	  </t>	  
+       Figure 1 below shows that after a transmission slot a Class A device
+turns on its receiver for two short receive windows that are offset from
+the end of the transmission window. The frequencies and data rate chosen
+for these receive windows depend on those used for the transmit window.
+If a downlink message preamble is detected during a receive window, then
+the end-device keeps the radio on in order to reeive the frame.
+</t>
+
+<t>End-devices can only transmit a 2nd uplink frame after the end
+of the associated receive windows.
+</t>
+
+
 <figure>
 		<preamble>
 		Figure 1: LoRaWAN Class A transmission and reception window.
@@ -172,6 +199,15 @@ transmission to help make the system more robust to interference.</t>
 
 	<section anchor="mac" title="MAC Layer">
 
+	<t>Uplink and downlink higher layer data is carried in a MACPayload.  There
+is a concept of "ports" (an optional 8 bit value) to handle different
+applications on an end-device. The header also distinguishes different
+directions and whether or not an acknowledgement ("confirmation") is required
+from the peer.</t>
+
+<t>In addition to carrying higher layer PDUs
+there are Join-Request and Join-Response (aka Join-Accept) messages for handling 
+network access.</t>
 
 	</section>
 
@@ -186,7 +222,7 @@ identifies the end-device. The DevEUI is preconfigured at each node.
 
    <t>
 
-A LoRaWAN device addressing can be conducted in two ways. Over the air
+Device addressing is done in one of two ways. Over-the-air
 activation (OTAA) and Activation by personalization (ABP). The former requires
 2 MAC layer messages to establish the network address and security keys
 (join-request and join-response). The latter assumes that device address and
@@ -207,24 +243,67 @@ Figure 3: DevEUI
 +------------+----------------+
 </artwork>
 </figure>
+
+<t>Once a device has joined the network, then a short device address ("DevAddr",
+a 32 bit locally assigned value) is used in MAC layer messages.</t>
+
+
 </section>
+
+	<section title="Planned Changes">
+	
+	<t>As with many LPWAN technologies LoRaWAN is constantly evolving both
+in details and in the large. For example, some detailed changes to the
+cryptography used are being discussed within the LoRa Alliance. Whether or
+not those result in backawards incompatible changes (things that affect
+ciphertext usually do), will be apparent in the the latest LoRaWAN
+specification.</t>
+
+	<t>Various LoRaWAN message formats including the MAC layer have 
+bits allocated that would allow for future changes to formats. In
+such cases, gateways and network-servers will be expected to support
+earlier releases, whereas end-devices may only support one version.</t>
+
+	<t>There is also some scope for vendor-specific ("proprietary") 
+extensions to MAC layer messages.</t>
+
+	<t>Larger changes are being considered in terms of connecting together
+multiple networks and allowing end-devices to roam over different networks.
+These changes are expected to become stable in 2017. [[Just a guess, maybe
+we don't want to say stuff like that, but no harm to let folks know roughly
+what's likely to change in the lifetime of the LPWAN WG.]]</t>
+
+	</section>
 
    <section title="Security Considerations">
        <t>
 		[[TBD, explain keying, provisioning and roaming]]
   </t>
+
+	<t>All MAC layer messages have an outer 32-bit Message Integrity Code (MIC) calculated
+using AES-CMAC calculated over the payload (ciphertext).</t>
+
+	<t>[[LoRaWAN has no built-in s/w update. That's a risk. And one it'd
+be good to try fix in general. I can imageine that might be a wrench for
+some folks.]]</t>
+
+	<t>[[Describe privacy issues.]]</t>
  	  
    </section>
+
    <section title="IANA Considerations">
       <t>
-        There are no IANA considerations related to this document.
+        There are no IANA considerations related to this memo.
       </t>
    </section>
    <section title="Acknowledgements">
       <t>
          The authors re-used some text from <xref target="I-D.vilajosana-lpwan-lora-hc"/>
-
       </t>
+
+		<t>Stephen Farrell's work on this memo was supported by the
+Science Foundation Ireleand funded CONNECT centre.</t>
+	
    </section>
 	
 	<section title="Implementation Status">
