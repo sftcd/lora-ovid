@@ -69,55 +69,91 @@
 <middle>
    <section title="Introduction">
 
-	<t>[[Comments to be addressed before publication are in double square brackets like this one]]</t>
+	<t>[[Comments to be addressed before publication are in double square
+brackets like this one]]</t>
 
 	  <t> LoRaWAN is a wireless technology for long-range low-power
-low-data-rate applications developed by Semtech, which is used in LoRaWAN
-networks. LoRaWAN networks typically are organized in a star-of-stars topology
-in which gateways relay messages between end-devices and a central network
-server in the backend. Gateways are connected to the network server via IP
-links while end-devices use single-hop LoRaWAN communication to one or many
+low-data-rate applications developed by the LoRa Alliance. 
+<eref target="https://www.lora-alliance.org/"/>
+LoRaWAN networks are typically organized in a star-of-stars topology
+in which gateways relay messages between end-devices and a central "network
+server" in the backend. Gateways are connected to the network server via IP
+links while end-devices use single-hop LoRaWAN communication that can be
+received at one or more
 gateways. All communication is generally bi-directional, although uplink
-communication from end-devices to the network server are strongly favoured.
+communication from end-devices to the network server are favoured in
+terms of overall bandwidth availability.
 </t>
 
-	  <t> Communication between end-devices and gateways is spread out among
-different frequency channels and so-called spreading factors. Selecting a
+	  <t> Communication between end-devices and gateways uses
+different frequencies and so-called spreading factors. 
+[[Needs better explanation.]]
+Selecting a
 spreading factor is a trade-off between required link budget and data rate.
 Spreading factors create virtual and orthogonal non-interfering communication
 channels that enable simultaneous transmissions.  Depending on the used
-spreading factor, LoRaWAN data rates range from 0.3 kbps to 50 kbps. To
+spreading factor, LoRaWAN data rates range from 0.3 kbps to 50 kbps. </t>
+
+<t>To
 maximize both battery life of end-devices and overall network capacity, the
 LoRaWAN network infrastructure manages the data rate and RF output for each
 end-device individually by means of an adaptive data rate (ADR) scheme.
+[[This seems to contradict the previous sentence.]]
 End-devices may transmit on any channel available at any time, using any
 available data rate.  </t>
 
-	   <t> The consolidation of that technology and its important impact in the
-M2M market, is triggering the need for end to end IP connectivity from end
-devices to the backend server without the need of proxying roles taken at
-Gateways. Due to the constrained nature of LoRaWAN devices, the compression
-techniques developed by 6LowPAN become mandatory. The present document
-specifies how IPv6 and the 6LowPAN architecture run on top of the LoRaWAN MAC
-layer.  </t>
+<t>This document provides an overview of the LoRaWAN technology for
+the Internet community, but
+the definitive specification 
+      <xref target="LoRaSpec"/>
+is that produced by the LoRa Alliance. [[What is the right version
+on which to base this? I'm using 1.0.1 from Feb 2016 for now. Is
+that public?]]</t>
 
    </section>
 
-   <section anchor="ref_for_later" title="Requirements Language">
-      <t>
-		 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document
-are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.
-</t> 
+	<section title="Terminology">
+
+	  <t> [[Not sure if this'll be needed. Leave it here for now.]] The key
+words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t> 
 	
+
+	<t>This section introduces some LoRaWAN terms.</t>
+<t><list style="symbols">
+
+	<t>End-device: a LoRa client device, sometimes called a mote. Communicates with gateways.</t>
+
+	<t>Gateway: a radio on the infrastructure-side, sometimes called a concentrator or base-station.
+	Communicates with gateways and, via the Internet, with a network server. [[one only?]]</t>
+
+	<t>Network Server: [[does stuff]]</t>
+
+</list></t>
+
 	</section>
 
-   <section title="Overview of LoRaWAN Technology">
+	<section anchor="spectrum" title="Spectrum">
 
+	<t>LoRaWAN radios make use of ISM bands, for example 433MHz and 868MHz
+within the European Union and 915Mhz in the Americas.</t>
+
+	<t>As with other LPWAN radion technologies, LoRaWAN end-devices respect the
+maximum transmit duty cycle relative to the sub-band used and local
+regulations. In many cases, this means an end-device only transmitting for 0.1%
+[[check]] of the time. The precise details of the duty-cycle is region
+specific.</t>
+
+	<t>The end-device changes channel in a pseudo-random fashion for every
+transmission to help make the system more robust to interference.</t>
+
+	</section>
+
+   <section title="Framing">
       <t>
        Briefly describe the technology. Phy layer and modulation. MAC operation and frame formats.
 	  </t>	  
-
 <figure>
 		<preamble>
 		Figure 1: LoRaWAN Class A transmission and reception window.
@@ -132,12 +168,11 @@ are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.
                               Rx delay 2             
 </artwork>
 </figure>
-
 	</section>
 
-	<section anchor="spectrum" title="Spectrum">
-	</section>
 	<section anchor="mac" title="MAC Layer">
+
+
 	</section>
 
     <section title="Addressing" anchor= "sec_lora_addressing">
@@ -176,9 +211,7 @@ Figure 3: DevEUI
 
    <section title="Security Considerations">
        <t>
-      The transmission of IPv6 over LoRaWAN links has similar
-      requirements and concerns for security as for IEEE 802.15.4. 
-      LoRaWAN Link Layer security considerations are covered by the LoRaWAN Specification <xref target="LoRaSpec"/>.
+		[[TBD, explain keying, provisioning and roaming]]
   </t>
  	  
    </section>
@@ -269,12 +302,12 @@ target="https://github.com/Lora-net/LoRaMac-node"/>.</t>
       <reference anchor="LoRaSpec" target="https://www.lora-alliance.org/portals/0/specs/LoRaWAN%20Specification%201R0.pdf">
          <front>
             <title>
-               LoRaWAN Specification Version V1.0
+               LoRaWAN Specification Version V1.0.1
             </title>
             <author>
                <organization>LoRa Alliance</organization>
             </author>
-            <date month="January" year="2015"/>
+            <date month="Feb" year="2016"/>
          </front>
       </reference>
 	</references>
