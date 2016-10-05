@@ -268,7 +268,7 @@ Internet-Draft                lora overview                 October 2016
    |                                           |         |             |
    | 868MHz band data rate/max-frame-size      |  rate:  | rate: 50000 |
    |                                           |   250   |    bits/s   |
-   |                                           |  bits/s |  frame: 222 |
+   |                                           |  bits/s |  frame: 250 |
    |                                           |  frame: |             |
    |                                           |    59   |             |
    +-------------------------------------------+---------+-------------+
