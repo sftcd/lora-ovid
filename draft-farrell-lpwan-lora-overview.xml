@@ -71,7 +71,7 @@ providing IPv6 connectivity over LoRaWAN along with other LPWANs.
 	<t>[[Comments to be addressed before publication are in double square
 brackets like this one]]</t>
 
-	<t>[[As on 20161005 SF got to ~page22 of LoRaSpec, I'm working down
+	<t>[[As on 20161005 SF got to ~page32 of LoRaSpec, I'm working down
 that and extracting bits of interest to the various sections here.]]</t>
 
 	  <t> LoRaWAN is a wireless technology for long-range low-power
@@ -84,6 +84,10 @@ single-hop LoRaWAN communication that can be received at one or more gateways.
 All communication is generally bi-directional, although uplink communication
 from end-devices to the network server are favoured in terms of overall
 bandwidth availability.  </t>
+
+	<t>In LoRaWAN networks, end-device transmissions may be received at
+multiple gateways, so during nominal operation a network server may see
+multiple instances of the same uplink message from an end-device.</t>
 
 	  <t> Communication between end-devices and gateways uses
 different frequencies and so-called spreading factors. 
@@ -163,6 +167,10 @@ specific.</t>
 	<t>The end-device changes channel in a pseudo-random fashion for every
 transmission to help make the system more robust to interference.</t>
 
+	<t>[[Add some table(s) summarising the important bits from chapter 7,
+e.g. with min/max data rates, payload sizes, frequencies etc. Not sure
+how best to do that but min/max might be ok.]]</t>
+
 	</section>
 
    <section title="PHY">
@@ -237,52 +245,123 @@ data rate.
 the network with a fall-back to lower rates in the event that 
 downlink acks go missing.</t>
 
-	<t>There are 16 bit frame counters maintained in each direction
+	<t>There are 16 (or 32) bit frame counters maintained in each direction
 that are incremented on each transmission (but not re-transmissions)
-that are not re-used. [[The 32-bit internal counter seems to conflict
-with the mode of operation of the crypto (that requires no re-use of
-the same key and nonce). I assume that's one of 
-the things-to-fix in recent discussions.]]</t>
+that are not re-used. When the device supports a 32 bit counter, then
+only the least significant 16 bits are sent in the MAC header, but
+all 32 bits are used in cryptographic operations. (If an end-device
+only supports a 16 bit counter internally, then the topmost 16 bits
+are set to zero.)</t>
+
+	<t>There are a number of MAC commands for:
+	Link and device status checking, ADR and duty-cycle negotiation,
+managing the RX windows and radio channel settings. For example,
+the link check response message allows the network server (in
+response to a request from an end-device) to
+inform an end-device about the signal attenuation seen most
+recently at a gateway, and to also tell the end-device how
+many gateways received the corresponding link request MAC
+command.</t>
+
+<t>Some MAC commands are initiated by the network server.
+For example, one command allows the network server
+to ask an end-device to reduce it's duty-cycle to only
+use a proportion of the maximum allowed in a region. 
+Another, allows the network server to query the
+device as to it's power status with the response from
+the end-device specifying whether it has an external power 
+source or is battery powered (in which case a relative
+level is also sent to the network server).</t>
+	
+	<t>The network server can also inform an end-device
+about channel assignments (mid-point frequencies and data
+rates). Of course, these must also remain within the
+bands assigned for the region.</t>
 
 
 
 	</section>
 
-    <section title="Addressing" anchor= "sec_lora_addressing">
-    
-   <t>
+    <section title="Names and Addressing" anchor= "sec_lora_addressing">
 
-The DevEUI is a global end-device ID in IEEE EUI64 address space that uniquely
-identifies the end-device. The DevEUI is preconfigured at each node.
+	<t>A LoRaWAN network has a short network identifer ("NwkID") which is a 
+seven bit value.  A private network (common for LoRaWAN) can use the value 
+zero. If
+a network wishes to support "foreign" end-devices then the NwkID
+needs to be registered with the LoRA alliance, in which case the
+NwkID is the seven least significant bits of a registered 24-bit
+NetID. (Note however, that
+the methods for "roaming" are currently being enhanced
+within the LoRA Alliance, so the situation here is somewhat fluid.)</t>
 
-   </t>
+	<t>In order to operate nominally on a LoRaWAN network, a device needs a 
+32-bit device address, which is the catentation of the NwkID and a
+25-bit device-specific network address that is assigned when the
+device "joins" the network (see below for the join procedure) or
+that is pre-provisioned into the device.</t>
 
-   <t>
+	<t>End-devices are assumed to work with one or a quite limited 
+number of applications, which matches most LoRaWAN use-cases. The
+applications are identified by a 64-bit AppEUI, which is assumed
+to be a registered IEEE EUI64 value.</t>
 
-Device addressing is done in one of two ways. Over-the-air
-activation (OTAA) and Activation by personalization (ABP). The former requires
-2 MAC layer messages to establish the network address and security keys
-(join-request and join-response). The latter assumes that device address and
-security keys are pre-programmed at the nodes and the DevEUI is not mandatory.
-Lately, the LoRaWAN Alliance is considering to mandate DevEUI in ABP mode.  
+	<t>In addition, a device needs to have two symmetric session
+keys, one for protecting network artefacts (port=0), the NwkSkey,
+and another for protecting appliction layer traffic, the 
+AppSKey. Both keys are used for 128 bit AES cryptgraphic
+operations. (See <xref target="sec-cons"/> for details.)</t>
 
-    </t>  
-    
-<figure>
-<preamble>
-Figure 3: DevEUI
-</preamble>
-<artwork>
-+------------+----------------+
-|  Bit#      |    [63..0]     | 
-+------------+----------------+
-| DevEUI     |     DevEUI     |
-+------------+----------------+
-</artwork>
-</figure>
+	<t>So, one option is for an end-device to have all of the above,
+plus channel information, 
+somehow (pre-)provisioned, in which case the end-device can
+simply start transmitting. This is achievable in many cases via
+out-of-band means given the nature of LoRaWAN networks.</t>
 
-<t>Once a device has joined the network, then a short device address ("DevAddr",
-a 32 bit locally assigned value) is used in MAC layer messages.</t>
+	<t>[[Add table of what's needed for nominal operation]]</t>
+
+	<t>As an alternative, end-devices can use the LoRaWAN
+Join procedure in order to setup some
+of these values and dynamically gain access to the network.</t>
+
+	<t>To use the Join interaction, an end-device must still
+know the same AppEUI, plus some other items and the remaining pieces 
+of information above are then derived from the Join procedure.</t>
+	
+	<t>In addition to the AppEUI, end-devices using the Join procedure
+need to also know a different (long-term) symmetric key  that
+is bound to the AppEUI - this is the application key (AppKey),
+and is distinct from the application session key (AppSKey). The
+AppKey is required to be specific to the device, that is, 
+each end-device should have a different AppKey value. And
+finally the end-device also needs a long-term identifier for
+itself, syntactically also an EUI-64, and known as the 
+device EUI or DevEUI.</t> 
+
+	<t>The Join procedure involves a special exchange where
+the end-device asserts the AppEUI and DevEUI (integrity 
+protected with the long-term AppKey, but not encrypted) in a join-request
+uplink message. This 
+is then routed to the network server which interacts with
+an entity that knows that AppKey to verify the join-request.
+All going well, a join-accept downlink message is returned
+to the end-device that specifies the 24-bit NetID, 32-bit
+DevAddr
+and channel information and from which the AppSKey and
+NwkSKey can be derived.</t>
+
+	<t>There is some special handling related to which channels 
+to use and for multiple transmissions for the join-request which
+is intended to ensure a successful join in as many cases as
+possible. Join-request and join-accept messages also incldue
+some random values (nonces) to both provide some replay 
+protection and to help ensure the session keys are unique
+per Join. If a join-request is not validated, then no join-accept
+message (indeed no message at all) is returned to the end-device.
+If an end-device is reset then it should end up in a
+state in which it can re-do the Join procedure. </t>
+
+	<t>[[Add a table with the Join procedure inputs and
+results]]</t>
 
 
 </section>
@@ -313,15 +392,20 @@ what's likely to change in the lifetime of the LPWAN WG.]]</t>
 	</section>
 
    <section anchor="sec-cons" title="Security Considerations">
-       <t>
-		[[TBD, explain keying, provisioning and roaming]]
-  </t>
 
-	<section anchor="key-mgmt" title="Key Management">
-	
+	<t>In this section we describe the use of cryptography and other
+security considerations arising. This section is not intended as a
+full specification for LoRaWAN security but to be sufficient so
+that future IETF specifications can encompass the required
+security considerations.</t>
+
+	<section anchor="key-mgmt" title="Activation/Personalisation and Key Management">
+
 	<t>Keying for MAC layer payloads is specific to the port ("FPort").</t>
 
 	<t>[[explain nw and app keys]]</t>
+
+	<t>[[explain join special case]]</t>
 
 	<t>[[explain when re-keying happens/is-needed]]</t>
 

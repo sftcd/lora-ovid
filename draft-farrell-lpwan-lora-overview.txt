@@ -72,26 +72,26 @@ Table of Contents
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
    3.  Spectrum  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
    4.  PHY . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   5.  MAC Layer . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   6.  Addressing  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-   7.  Planned Changes . . . . . . . . . . . . . . . . . . . . . . .   6
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
-     8.1.  Key Management  . . . . . . . . . . . . . . . . . . . . .   6
-     8.2.  Payload Encryption and Data Integrity . . . . . . . . . .   7
-     8.3.  Other Security and Privacy Considerations . . . . . . . .   7
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
-   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
-   11. Implementation Status . . . . . . . . . . . . . . . . . . . .   7
-     11.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .   9
-   12. Informative References  . . . . . . . . . . . . . . . . . . .   9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+   5.  MAC Layer . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   6.  Names and Addressing  . . . . . . . . . . . . . . . . . . . .   6
+   7.  Planned Changes . . . . . . . . . . . . . . . . . . . . . . .   8
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Activation/Personalisation and Key Management . . . . . .   8
+     8.2.  Payload Encryption and Data Integrity . . . . . . . . . .   9
+     8.3.  Other Security and Privacy Considerations . . . . . . . .   9
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   9
+   11. Implementation Status . . . . . . . . . . . . . . . . . . . .   9
+     11.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .  11
+   12. Informative References  . . . . . . . . . . . . . . . . . . .  11
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
    [[Comments to be addressed before publication are in double square
    brackets like this one]]
 
-   [[As on 20161005 SF got to ~page22 of LoRaSpec, I'm working down that
+   [[As on 20161005 SF got to ~page32 of LoRaSpec, I'm working down that
    and extracting bits of interest to the various sections here.]]
 
    LoRaWAN is a wireless technology for long-range low-power low-data-
@@ -113,6 +113,10 @@ Farrell & Yegin           Expires April 8, 2017                 [Page 2]
 
 Internet-Draft                lora overview                 October 2016
 
+
+   In LoRaWAN networks, end-device transmissions may be received at
+   multiple gateways, so during nominal operation a network server may
+   see multiple instances of the same uplink message from an end-device.
 
    Communication between end-devices and gateways uses different
    frequencies and so-called spreading factors.  [[Needs better
@@ -158,10 +162,6 @@ Internet-Draft                lora overview                 October 2016
       all devices need to support acting as a class A device.  Class B
       have additional end-device receive slots allocated for better
       gateway to end-device bandwidth.  Class C end-devices can receive
-      at any time they are not sending and hence have even better
-      inbound (to end-device) bandwidth.  Classes B and C are not
-      further discussed in this memo.  [[Are these really classes of
-      device or modes of operation?]]
 
 
 
@@ -169,6 +169,11 @@ Farrell & Yegin           Expires April 8, 2017                 [Page 3]
 
 Internet-Draft                lora overview                 October 2016
 
+
+      at any time they are not sending and hence have even better
+      inbound (to end-device) bandwidth.  Classes B and C are not
+      further discussed in this memo.  [[Are these really classes of
+      device or modes of operation?]]
 
    o  Uplink message: refers to communications from end-device to
       network server via one or more gateways.
@@ -190,6 +195,10 @@ Internet-Draft                lora overview                 October 2016
    The end-device changes channel in a pseudo-random fashion for every
    transmission to help make the system more robust to interference.
 
+   [[Add some table(s) summarising the important bits from chapter 7,
+   e.g. with min/max data rates, payload sizes, frequencies etc.  Not
+   sure how best to do that but min/max might be ok.]]
+
 4.  PHY
 
    Figure 1 below shows that after a transmission slot a Class A device
@@ -202,6 +211,20 @@ Internet-Draft                lora overview                 October 2016
 
    End-devices can only transmit a 2nd uplink frame after the end of the
    associated receive windows.
+
+
+
+
+
+
+
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 4]
+
+Internet-Draft                lora overview                 October 2016
+
 
    Figure 1: LoRaWAN Class A transmission and reception window.
 
@@ -218,14 +241,6 @@ Internet-Draft                lora overview                 October 2016
    Uplink and downlink higher layer data is carried in a MACPayload.
    There is a concept of "ports" (an optional 8 bit value) to handle
    different applications on an end-device.  The header also
-
-
-
-Farrell & Yegin           Expires April 8, 2017                 [Page 4]
-
-Internet-Draft                lora overview                 October 2016
-
-
    distinguishes different directions and whether or not an
    acknowledgement ("confirmation") is required from the peer.
 
@@ -256,24 +271,9 @@ Internet-Draft                lora overview                 October 2016
    network with a fall-back to lower rates in the event that downlink
    acks go missing.
 
-   There are 16 bit frame counters maintained in each direction that are
-   incremented on each transmission (but not re-transmissions) that are
-   not re-used.  [[The 32-bit internal counter seems to conflict with
-   the mode of operation of the crypto (that requires no re-use of the
-   same key and nonce).  I assume that's one of the things-to-fix in
-   recent discussions.]]
-
-6.  Addressing
-
-   The DevEUI is a global end-device ID in IEEE EUI64 address space that
-   uniquely identifies the end-device.  The DevEUI is preconfigured at
-   each node.
-
-   Device addressing is done in one of two ways.  Over-the-air
-   activation (OTAA) and Activation by personalization (ABP).  The
-   former requires 2 MAC layer messages to establish the network address
-   and security keys (join-request and join-response).  The latter
-   assumes that device address and security keys are pre-programmed at
+   There are 16 (or 32) bit frame counters maintained in each direction
+   that are incremented on each transmission (but not re-transmissions)
+   that are not re-used.  When the device supports a 32 bit counter,
 
 
 
@@ -282,20 +282,119 @@ Farrell & Yegin           Expires April 8, 2017                 [Page 5]
 Internet-Draft                lora overview                 October 2016
 
 
-   the nodes and the DevEUI is not mandatory.  Lately, the LoRaWAN
-   Alliance is considering to mandate DevEUI in ABP mode.
+   then only the least significant 16 bits are sent in the MAC header,
+   but all 32 bits are used in cryptographic operations.  (If an end-
+   device only supports a 16 bit counter internally, then the topmost 16
+   bits are set to zero.)
 
-   Figure 3: DevEUI
+   There are a number of MAC commands for: Link and device status
+   checking, ADR and duty-cycle negotiation, managing the RX windows and
+   radio channel settings.  For example, the link check response message
+   allows the network server (in response to a request from an end-
+   device) to inform an end-device about the signal attenuation seen
+   most recently at a gateway, and to also tell the end-device how many
+   gateways received the corresponding link request MAC command.
 
-   +------------+----------------+
-   |  Bit#      |    [63..0]     |
-   +------------+----------------+
-   | DevEUI     |     DevEUI     |
-   +------------+----------------+
+   Some MAC commands are initiated by the network server.  For example,
+   one command allows the network server to ask an end-device to reduce
+   it's duty-cycle to only use a proportion of the maximum allowed in a
+   region.  Another, allows the network server to query the device as to
+   it's power status with the response from the end-device specifying
+   whether it has an external power source or is battery powered (in
+   which case a relative level is also sent to the network server).
 
-   Once a device has joined the network, then a short device address
-   ("DevAddr", a 32 bit locally assigned value) is used in MAC layer
-   messages.
+   The network server can also inform an end-device about channel
+   assignments (mid-point frequencies and data rates).  Of course, these
+   must also remain within the bands assigned for the region.
+
+6.  Names and Addressing
+
+   A LoRaWAN network has a short network identifer ("NwkID") which is a
+   seven bit value.  A private network (common for LoRaWAN) can use the
+   value zero.  If a network wishes to support "foreign" end-devices
+   then the NwkID needs to be registered with the LoRA alliance, in
+   which case the NwkID is the seven least significant bits of a
+   registered 24-bit NetID.  (Note however, that the methods for
+   "roaming" are currently being enhanced within the LoRA Alliance, so
+   the situation here is somewhat fluid.)
+
+   In order to operate nominally on a LoRaWAN network, a device needs a
+   32-bit device address, which is the catentation of the NwkID and a
+   25-bit device-specific network address that is assigned when the
+   device "joins" the network (see below for the join procedure) or that
+   is pre-provisioned into the device.
+
+   End-devices are assumed to work with one or a quite limited number of
+   applications, which matches most LoRaWAN use-cases.  The applications
+   are identified by a 64-bit AppEUI, which is assumed to be a
+   registered IEEE EUI64 value.
+
+
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 6]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   In addition, a device needs to have two symmetric session keys, one
+   for protecting network artefacts (port=0), the NwkSkey, and another
+   for protecting appliction layer traffic, the AppSKey.  Both keys are
+   used for 128 bit AES cryptgraphic operations.  (See Section 8 for
+   details.)
+
+   So, one option is for an end-device to have all of the above, plus
+   channel information, somehow (pre-)provisioned, in which case the
+   end-device can simply start transmitting.  This is achievable in many
+   cases via out-of-band means given the nature of LoRaWAN networks.
+
+   [[Add table of what's needed for nominal operation]]
+
+   As an alternative, end-devices can use the LoRaWAN Join procedure in
+   order to setup some of these values and dynamically gain access to
+   the network.
+
+   To use the Join interaction, an end-device must still know the same
+   AppEUI, plus some other items and the remaining pieces of information
+   above are then derived from the Join procedure.
+
+   In addition to the AppEUI, end-devices using the Join procedure need
+   to also know a different (long-term) symmetric key that is bound to
+   the AppEUI - this is the application key (AppKey), and is distinct
+   from the application session key (AppSKey).  The AppKey is required
+   to be specific to the device, that is, each end-device should have a
+   different AppKey value.  And finally the end-device also needs a
+   long-term identifier for itself, syntactically also an EUI-64, and
+   known as the device EUI or DevEUI.
+
+   The Join procedure involves a special exchange where the end-device
+   asserts the AppEUI and DevEUI (integrity protected with the long-term
+   AppKey, but not encrypted) in a join-request uplink message.  This is
+   then routed to the network server which interacts with an entity that
+   knows that AppKey to verify the join-request.  All going well, a
+   join-accept downlink message is returned to the end-device that
+   specifies the 24-bit NetID, 32-bit DevAddr and channel information
+   and from which the AppSKey and NwkSKey can be derived.
+
+   There is some special handling related to which channels to use and
+   for multiple transmissions for the join-request which is intended to
+   ensure a successful join in as many cases as possible.  Join-request
+   and join-accept messages also incldue some random values (nonces) to
+   both provide some replay protection and to help ensure the session
+   keys are unique per Join.  If a join-request is not validated, then
+   no join-accept message (indeed no message at all) is returned to the
+   end-device.  If an end-device is reset then it should end up in a
+   state in which it can re-do the Join procedure.
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 7]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   [[Add a table with the Join procedure inputs and results]]
 
 7.  Planned Changes
 
@@ -323,22 +422,33 @@ Internet-Draft                lora overview                 October 2016
 
 8.  Security Considerations
 
-   [[TBD, explain keying, provisioning and roaming]]
+   In this section we describe the use of cryptography and other
+   security considerations arising.  This section is not intended as a
+   full specification for LoRaWAN security but to be sufficient so that
+   future IETF specifications can encompass the required security
+   considerations.
 
-8.1.  Key Management
+8.1.  Activation/Personalisation and Key Management
 
    Keying for MAC layer payloads is specific to the port ("FPort").
 
    [[explain nw and app keys]]
 
+   [[explain join special case]]
+
+   [[explain when re-keying happens/is-needed]]
 
 
-Farrell & Yegin           Expires April 8, 2017                 [Page 6]
+
+
+
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 8]
 
 Internet-Draft                lora overview                 October 2016
 
-
-   [[explain when re-keying happens/is-needed]]
 
 8.2.  Payload Encryption and Data Integrity
 
@@ -386,16 +496,16 @@ Internet-Draft                lora overview                 October 2016
    drafts to RFCs.  Please note that the listing of any individual
    implementation here does not imply endorsement by the IETF.
    Furthermore, no effort has been spent to verify the information
+   presented here that was supplied by IETF contributors.  This is not
+   intended as, and must not be construed to be, a catalog of available
 
 
 
-Farrell & Yegin           Expires April 8, 2017                 [Page 7]
+Farrell & Yegin           Expires April 8, 2017                 [Page 9]
 
 Internet-Draft                lora overview                 October 2016
 
 
-   presented here that was supplied by IETF contributors.  This is not
-   intended as, and must not be construed to be, a catalog of available
    implementations or their features.  Readers are advised to note that
    other implementations may exist.
 
@@ -442,16 +552,15 @@ Internet-Draft                lora overview                 October 2016
    o  Contact information: ideally a person's name and email address,
       but possibly just a URL or mailing list.
 
+   o  The date when information about this particular implementation was
+      last updated.
 
 
 
-Farrell & Yegin           Expires April 8, 2017                 [Page 8]
+Farrell & Yegin           Expires April 8, 2017                [Page 10]
 
 Internet-Draft                lora overview                 October 2016
 
-
-   o  The date when information about this particular implementation was
-      last updated.
 
 11.1.  LoRAMac-node
 
@@ -501,4 +610,7 @@ Authors' Addresses
 
 
 
-Farrell & Yegin           Expires April 8, 2017                 [Page 9]
+
+
+
+Farrell & Yegin           Expires April 8, 2017                [Page 11]
