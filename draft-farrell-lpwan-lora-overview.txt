@@ -74,21 +74,24 @@ Table of Contents
    4.  PHY . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
    5.  MAC Layer . . . . . . . . . . . . . . . . . . . . . . . . . .   4
    6.  Addressing  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-   7.  Planned Changes . . . . . . . . . . . . . . . . . . . . . . .   5
+   7.  Planned Changes . . . . . . . . . . . . . . . . . . . . . . .   6
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
-   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
-   11. Implementation Status . . . . . . . . . . . . . . . . . . . .   6
-     11.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .   7
-   12. Informative References  . . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Key Management  . . . . . . . . . . . . . . . . . . . . .   6
+     8.2.  Payload Encryption and Data Integrity . . . . . . . . . .   7
+     8.3.  Other Security and Privacy Considerations . . . . . . . .   7
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
+   11. Implementation Status . . . . . . . . . . . . . . . . . . . .   7
+     11.1.  LoRAMac-node . . . . . . . . . . . . . . . . . . . . . .   9
+   12. Informative References  . . . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
 
    [[Comments to be addressed before publication are in double square
    brackets like this one]]
 
-   [[As on 20161004 SF got to ~page16 of LoRaSpec, I'm working down that
+   [[As on 20161005 SF got to ~page22 of LoRaSpec, I'm working down that
    and extracting bits of interest to the various sections here.]]
 
    LoRaWAN is a wireless technology for long-range low-power low-data-
@@ -103,9 +106,6 @@ Table of Contents
    devices to the network server are favoured in terms of overall
    bandwidth availability.
 
-   Communication between end-devices and gateways uses different
-   frequencies and so-called spreading factors.  [[Needs better
-   explanation.]] Selecting a spreading factor is a trade-off between
 
 
 
@@ -114,6 +114,9 @@ Farrell & Yegin           Expires April 8, 2017                 [Page 2]
 Internet-Draft                lora overview                 October 2016
 
 
+   Communication between end-devices and gateways uses different
+   frequencies and so-called spreading factors.  [[Needs better
+   explanation.]] Selecting a spreading factor is a trade-off between
    required link budget and data rate.  Spreading factors create virtual
    and orthogonal non-interfering communication channels that enable
    simultaneous transmissions.  Depending on the used spreading factor,
@@ -160,15 +163,15 @@ Internet-Draft                lora overview                 October 2016
       further discussed in this memo.  [[Are these really classes of
       device or modes of operation?]]
 
-   o  Uplink message: refers to communications from end-device to
-      network server via one or more gateways.
-
 
 
 Farrell & Yegin           Expires April 8, 2017                 [Page 3]
 
 Internet-Draft                lora overview                 October 2016
 
+
+   o  Uplink message: refers to communications from end-device to
+      network server via one or more gateways.
 
    o  Downlink message: refers to communications from network server via
       one gateway to a single end-device.
@@ -215,9 +218,6 @@ Internet-Draft                lora overview                 October 2016
    Uplink and downlink higher layer data is carried in a MACPayload.
    There is a concept of "ports" (an optional 8 bit value) to handle
    different applications on an end-device.  The header also
-   distinguishes different directions and whether or not an
-   acknowledgement ("confirmation") is required from the peer.
-
 
 
 
@@ -226,8 +226,42 @@ Farrell & Yegin           Expires April 8, 2017                 [Page 4]
 Internet-Draft                lora overview                 October 2016
 
 
+   distinguishes different directions and whether or not an
+   acknowledgement ("confirmation") is required from the peer.
+
    In addition to carrying higher layer PDUs there are Join-Request and
    Join-Response (aka Join-Accept) messages for handling network access.
+   And so-called "MAC commands" up to 15 bytes long (e.g. for [[what]])
+   can be piggybacked in an options field ("FOpts").
+
+   Payload lengths are variable with a maximum that is region-specific.
+
+   All payloads are encrypted and ciphertexts are protected with a
+   cryptographic Message Integrity Check (MIC) - see Section 8 for
+   details.
+
+   LoRaWAN end-devices can choose various different data rates from a
+   menu of available rates (dependent on the frequencies in use).  It is
+   however, recommended that end-devices set the Adaptive Data Rate
+   ("ADR") bit in the MAC layer which is a signal that the network
+   should control the data rate (via MAC commands to the end-device).
+   The network can also assert the ADR bit and control data rates at
+   it's discretion.  The goal is to ensure minimal on-time for radios
+   whilst increasing throughput when possible.  Other things being
+   equal, the effect should be that end-devices closer to a gateway can
+   successfully use higher data rates, whereas end-devices further from
+   all gateways still receive connectivity though at a lower data rate.
+
+   Data rate changes can be validated via a scheme of acks from the
+   network with a fall-back to lower rates in the event that downlink
+   acks go missing.
+
+   There are 16 bit frame counters maintained in each direction that are
+   incremented on each transmission (but not re-transmissions) that are
+   not re-used.  [[The 32-bit internal counter seems to conflict with
+   the mode of operation of the crypto (that requires no re-use of the
+   same key and nonce).  I assume that's one of the things-to-fix in
+   recent discussions.]]
 
 6.  Addressing
 
@@ -240,6 +274,14 @@ Internet-Draft                lora overview                 October 2016
    former requires 2 MAC layer messages to establish the network address
    and security keys (join-request and join-response).  The latter
    assumes that device address and security keys are pre-programmed at
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 5]
+
+Internet-Draft                lora overview                 October 2016
+
+
    the nodes and the DevEUI is not mandatory.  Lately, the LoRaWAN
    Alliance is considering to mandate DevEUI in ABP mode.
 
@@ -274,14 +316,6 @@ Internet-Draft                lora overview                 October 2016
 
    Larger changes are being considered in terms of connecting together
    multiple networks and allowing end-devices to roam over different
-
-
-
-Farrell & Yegin           Expires April 8, 2017                 [Page 5]
-
-Internet-Draft                lora overview                 October 2016
-
-
    networks.  These changes are expected to become stable in 2017.
    [[Just a guess, maybe we don't want to say stuff like that, but no
    harm to let folks know roughly what's likely to change in the
@@ -291,9 +325,36 @@ Internet-Draft                lora overview                 October 2016
 
    [[TBD, explain keying, provisioning and roaming]]
 
+8.1.  Key Management
+
+   Keying for MAC layer payloads is specific to the port ("FPort").
+
+   [[explain nw and app keys]]
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 6]
+
+Internet-Draft                lora overview                 October 2016
+
+
+   [[explain when re-keying happens/is-needed]]
+
+8.2.  Payload Encryption and Data Integrity
+
+   All payloads are encrypted and have data integrity.  Frame options
+   (used for MAC commands) when sent as a payload (FPort==0) are
+   therefore protected.  MAC commands piggy-backed as frame options
+   ("FOpts") are sent in clear.
+
    All MAC layer messages have an outer 32-bit Message Integrity Code
-   (MIC) calculated using AES-CMAC calculated over the payload
-   (ciphertext).
+   (MIC) calculated using AES-CMAC calculated over the ciphertext
+   payload and other headers.
+
+   Payloads are encrypted using AES-128, with a counter-mode dervived
+   from IEEE 802.15.4. [[add ref]]
+
+8.3.  Other Security and Privacy Considerations
 
    [[LoRaWAN has no built-in s/w update.  That's a risk.  And one it'd
    be good to try fix in general.  I can imageine that might be a wrench
@@ -309,8 +370,11 @@ Internet-Draft                lora overview                 October 2016
 
    The authors re-used some text from [I-D.vilajosana-lpwan-lora-hc]
 
+   Thanks to [[your name here]] for comments.
+
    Stephen Farrell's work on this memo was supported by the Science
-   Foundation Ireleand funded CONNECT centre.
+   Foundation Ireleand funded CONNECT centre
+   <https://connectcentre.ie/>.
 
 11.  Implementation Status
 
@@ -322,6 +386,14 @@ Internet-Draft                lora overview                 October 2016
    drafts to RFCs.  Please note that the listing of any individual
    implementation here does not imply endorsement by the IETF.
    Furthermore, no effort has been spent to verify the information
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 7]
+
+Internet-Draft                lora overview                 October 2016
+
+
    presented here that was supplied by IETF contributors.  This is not
    intended as, and must not be construed to be, a catalog of available
    implementations or their features.  Readers are advised to note that
@@ -330,14 +402,6 @@ Internet-Draft                lora overview                 October 2016
    According to RFC 7942, "this will allow reviewers and working groups
    to assign due consideration to documents that have the benefit of
    running code, which may serve as evidence of valuable experimentation
-
-
-
-Farrell & Yegin           Expires April 8, 2017                 [Page 6]
-
-Internet-Draft                lora overview                 October 2016
-
-
    and feedback that have made the implemented protocols more mature.
    It is up to the individual working groups to use this information as
    they see fit".
@@ -378,6 +442,14 @@ Internet-Draft                lora overview                 October 2016
    o  Contact information: ideally a person's name and email address,
       but possibly just a URL or mailing list.
 
+
+
+
+Farrell & Yegin           Expires April 8, 2017                 [Page 8]
+
+Internet-Draft                lora overview                 October 2016
+
+
    o  The date when information about this particular implementation was
       last updated.
 
@@ -385,14 +457,6 @@ Internet-Draft                lora overview                 October 2016
 
    There is a BSD Licensed implementation of the LoRaWAN MAC layer at
    <https://github.com/Lora-net/LoRaMac-node>.
-
-
-
-
-Farrell & Yegin           Expires April 8, 2017                 [Page 7]
-
-Internet-Draft                lora overview                 October 2016
-
 
 12.  Informative References
 
@@ -437,12 +501,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-Farrell & Yegin           Expires April 8, 2017                 [Page 8]
+Farrell & Yegin           Expires April 8, 2017                 [Page 9]

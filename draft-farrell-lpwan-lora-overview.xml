@@ -71,7 +71,7 @@ providing IPv6 connectivity over LoRaWAN along with other LPWANs.
 	<t>[[Comments to be addressed before publication are in double square
 brackets like this one]]</t>
 
-	<t>[[As on 20161004 SF got to ~page16 of LoRaSpec, I'm working down
+	<t>[[As on 20161005 SF got to ~page22 of LoRaSpec, I'm working down
 that and extracting bits of interest to the various sections here.]]</t>
 
 	  <t> LoRaWAN is a wireless technology for long-range low-power
@@ -207,7 +207,44 @@ from the peer.</t>
 
 <t>In addition to carrying higher layer PDUs
 there are Join-Request and Join-Response (aka Join-Accept) messages for handling 
-network access.</t>
+network access. And so-called "MAC commands" up to 15 bytes long (e.g. for [[what]]) can be 
+piggybacked in an options field ("FOpts").</t>
+
+	<t>Payload lengths are variable with a maximum that is region-specific.</t>
+
+	<t>All payloads are encrypted  
+and ciphertexts are protected with a cryptographic
+Message Integrity Check (MIC) 
+- see <xref target="sec-cons"/> for details.</t>
+
+
+	<t>LoRaWAN end-devices can choose various different data rates from a menu
+of available rates (dependent on the frequencies in use). It is however, 
+recommended that end-devices set the Adaptive Data Rate ("ADR") bit
+in the MAC layer which is a signal that the network should control the
+data rate (via MAC commands to the end-device). 
+The network can also assert the ADR bit and control data rates at it's
+discretion.
+The goal is to ensure
+minimal on-time for radios whilst increasing throughput when possible.
+Other things being equal, the effect should be that end-devices closer to a 
+gateway can successfully use higher data rates, whereas end-devices
+further from all gateways still receive connectivity though at a lower
+data rate.
+</t>
+
+	<t>Data rate changes can be validated via a scheme of acks from
+the network with a fall-back to lower rates in the event that 
+downlink acks go missing.</t>
+
+	<t>There are 16 bit frame counters maintained in each direction
+that are incremented on each transmission (but not re-transmissions)
+that are not re-used. [[The 32-bit internal counter seems to conflict
+with the mode of operation of the crypto (that requires no re-use of
+the same key and nonce). I assume that's one of 
+the things-to-fix in recent discussions.]]</t>
+
+
 
 	</section>
 
@@ -275,19 +312,46 @@ what's likely to change in the lifetime of the LPWAN WG.]]</t>
 
 	</section>
 
-   <section title="Security Considerations">
+   <section anchor="sec-cons" title="Security Considerations">
        <t>
 		[[TBD, explain keying, provisioning and roaming]]
   </t>
 
+	<section anchor="key-mgmt" title="Key Management">
+	
+	<t>Keying for MAC layer payloads is specific to the port ("FPort").</t>
+
+	<t>[[explain nw and app keys]]</t>
+
+	<t>[[explain when re-keying happens/is-needed]]</t>
+
+	</section>
+
+
+	<section anchor="crypto" title="Payload Encryption and Data Integrity">
+
+	<t>All payloads are encrypted and have data integrity. Frame options
+(used for MAC commands) when sent as a payload (FPort==0) are therefore 
+protected. MAC commands piggy-backed as frame options ("FOpts") are
+sent in clear.</t>
+
 	<t>All MAC layer messages have an outer 32-bit Message Integrity Code (MIC) calculated
-using AES-CMAC calculated over the payload (ciphertext).</t>
+using AES-CMAC calculated over the ciphertext payload and other headers.</t>
+
+	<t>Payloads are encrypted using 
+AES-128, with a counter-mode dervived from IEEE 802.15.4. [[add ref]] </t>
+
+	</section>
+
+	<section anchor="other-sec-cons" title="Other Security and Privacy Considerations">
 
 	<t>[[LoRaWAN has no built-in s/w update. That's a risk. And one it'd
 be good to try fix in general. I can imageine that might be a wrench for
 some folks.]]</t>
 
 	<t>[[Describe privacy issues.]]</t>
+
+	</section>
  	  
    </section>
 
@@ -301,8 +365,11 @@ some folks.]]</t>
          The authors re-used some text from <xref target="I-D.vilajosana-lpwan-lora-hc"/>
       </t>
 
+	<t>Thanks to [[your name here]] for comments.</t>
+
 		<t>Stephen Farrell's work on this memo was supported by the
-Science Foundation Ireleand funded CONNECT centre.</t>
+Science Foundation Ireleand funded CONNECT centre 
+<eref target="https://connectcentre.ie/"/>.</t>
 	
    </section>
 	
