@@ -89,15 +89,6 @@ bandwidth availability.  </t>
 multiple gateways, so during nominal operation a network server may see
 multiple instances of the same uplink message from an end-device.</t>
 
-	  <t> Communication between end-devices and gateways uses
-different frequencies and so-called spreading factors. 
-[[Needs better explanation.]]
-Selecting a
-spreading factor is a trade-off between required link budget and data rate.
-Spreading factors create virtual and orthogonal non-interfering communication
-channels that enable simultaneous transmissions.  Depending on the used
-spreading factor, LoRaWAN data rates range from 0.3 kbps to 50 kbps. </t>
-
 <t>To
 maximize both battery life of end-devices and overall network capacity, the
 LoRaWAN network infrastructure manages the data rate and RF output for each
@@ -153,30 +144,23 @@ end-device. </t>
 
 	</section>
 
-	<section anchor="spectrum" title="Spectrum">
+	<section anchor="spectrum" title="Radio Spectrum">
 
-	<t>LoRaWAN radios make use of ISM bands, for example 433MHz and 868MHz
+	<t>LoRaWAN radios make use of ISM bands, for example, 433MHz and 868MHz
 within the European Union and 915Mhz in the Americas.</t>
-
-	<t>As with other LPWAN radion technologies, LoRaWAN end-devices respect the
-maximum transmit duty cycle relative to the sub-band used and local
-regulations. In many cases, this means an end-device only transmitting for 0.1%
-[[check]] of the time. The precise details of the duty-cycle is region
-specific.</t>
 
 	<t>The end-device changes channel in a pseudo-random fashion for every
 transmission to help make the system more robust to interference.</t>
 
-	<t>[[Add some table(s) summarising the important bits from chapter 7,
-e.g. with min/max data rates, payload sizes, frequencies etc. Not sure
-how best to do that but min/max might be ok.]]</t>
-
-	</section>
-
-   <section title="PHY">
+	<t>As with other LPWAN radio technologies, LoRaWAN end-devices respect the
+frequency, power and maximum transmit duty cycle requirements for the sub-band used and local
+regulations. In many cases, this means an end-device only transmitting for 1%
+ of the time. The precise details of all of these are region specific and
+vary significantly, however there is (almost) always a specific time slot at 
+which the next transmission can be made.</t>
 
       <t>
-       Figure 1 below shows that after a transmission slot a Class A device
+       <xref target="fig1"/> below shows that after a transmission slot a Class A device
 turns on its receiver for two short receive windows that are offset from
 the end of the transmission window. The frequencies and data rate chosen
 for these receive windows depend on those used for the transmit window.
@@ -189,10 +173,7 @@ of the associated receive windows.
 </t>
 
 
-<figure>
-		<preamble>
-		Figure 1: LoRaWAN Class A transmission and reception window.
-       </preamble>
+<figure anchor="fig1" title="LoRaWAN Class A transmission and reception window">
 <artwork>
 |----------------------------|         |--------|     |--------|
 |             Tx             |         |   Rx   |     |   Rx   |
@@ -203,6 +184,109 @@ of the associated receive windows.
                               Rx delay 2             
 </artwork>
 </figure>
+
+	<t>[[Add some table(s) summarising the important bits from chapter 7,
+e.g. with min/max data rates, payload sizes, frequencies etc. Not sure
+how best to do that but min/max might be ok.]]</t>
+
+	<t>Given the different regional requirements the full specification
+for the LoRaWan physical layer is complex for example taking up more than 30 pages
+of the specification so we will not try to reproduce all of that here.
+Instead and mainly to illustrate the kinds of issue encountered, we present 
+the set of default settings for one ISM band (without fully explaining
+those here) and
+indicate the maxima and minima for various parameters of interest
+to those defining how to use IETF protocols over the LoRaWAN MAC
+layer.</t>
+
+<texttable anchor="table-ism868" title="Default settings for EU868MHz band">
+    <ttcol align='center'>Parameters</ttcol>
+    <ttcol align='center'>Default Value</ttcol>
+    <ttcol align='center'>Notes</ttcol>
+<c>
+Rx delay 1
+</c>
+<c>
+1 s
+</c>
+<c>
+</c>
+<c>
+Rx delay 2
+</c>
+<c>
+2 s (must be RECEIVE_DELAY1 + 1s)
+</c>
+<c>
+</c>
+<c>
+JOIN_ACCEPT_DELAY1
+</c>
+<c>
+5 s
+</c>
+<c>
+</c>
+<c>
+JOIN_ACCEPT_DELAY2
+</c>
+<c>
+6 s
+</c>
+<c>
+</c>
+<c>
+MAX_FCNT_GAP
+</c>
+<c>
+16384
+</c>
+<c>
+</c>
+<c>
+ADR_ACK_LIMIT
+</c>
+<c>
+64
+</c>
+<c>
+</c>
+<c>
+ADR_ACK_DELAY
+</c>
+<c>
+32
+</c>
+<c>
+</c>
+<c>
+ACK_TIMEOUT
+</c>
+<c>
+2 +/- 1 s (random delay between 1 and 3 seconds)
+</c>
+<c>
+</c>
+</texttable>
+
+<texttable anchor="table-minmax" title="Minima and Maxima for various LoRaWAN Parameters">
+    <ttcol align='left'>Parameter/Notes</ttcol>
+    <ttcol align='center'>Min</ttcol>
+    <ttcol align='center'>Max</ttcol>
+<c>Param: the name of the setting and a bit of explanatory text </c>
+<c>0</c>
+<c>89828828282</c>
+<c>Duty Cycle: some but not all ISM bands impose a limit in terms of how often an
+end-device can transmit. In some cases LoRaWAN is more stringent in an attempt to
+avoid congestion.</c>
+<c>1%</c>
+<c>no-limit</c>
+<c>868MHz band data rate/max-frame-size</c>
+<c>rate: 250 bits/s frame: 59</c>
+<c>rate: 50000 bits/s frame: 250</c>
+
+</texttable>
+
 	</section>
 
 	<section anchor="mac" title="MAC Layer">
