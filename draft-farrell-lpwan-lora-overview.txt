@@ -129,11 +129,6 @@ Internet-Draft                lora overview                 October 2016
 
 2.  Terminology
 
-   [[Not sure if 2119 terms will be needed.  Leave it here for now.]]
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in RFC 2119 [RFC2119].
-
    This section introduces some LoRaWAN terms.
 
    o  End-device: a LoRa client device, sometimes called a mote.
@@ -161,6 +156,11 @@ Internet-Draft                lora overview                 October 2016
    o  Uplink message: refers to communications from end-device to
       network server via one or more gateways.
 
+   o  Downlink message: refers to communications from network server via
+      one gateway to a single end-device.
+
+
+
 
 
 
@@ -169,9 +169,6 @@ Farrell & Yegin          Expires April 14, 2017                 [Page 3]
 
 Internet-Draft                lora overview                 October 2016
 
-
-   o  Downlink message: refers to communications from network server via
-      one gateway to a single end-device.
 
 3.  Radio Spectrum
 
@@ -218,6 +215,9 @@ Internet-Draft                lora overview                 October 2016
    the LoRaWan physical layer is complex (taking up more than 30 pages
    of the specification) so we will not try to reproduce all of that
    here.  Instead and mainly to illustrate the kinds of issue
+   encountered, in Table 1 we present some of the default settings for
+   one ISM band (without fully explaining those here) and in Table 2 we
+
 
 
 
@@ -226,8 +226,6 @@ Farrell & Yegin          Expires April 14, 2017                 [Page 4]
 Internet-Draft                lora overview                 October 2016
 
 
-   encountered, in Table 1 we present some of the default settings for
-   one ISM band (without fully explaining those here) and in Table 2 we
    describe maxima and minima for some parameters of interest to those
    defining ways to use IETF protocols over the LoRaWAN MAC layer.
 
@@ -274,6 +272,8 @@ Internet-Draft                lora overview                 October 2016
    for payload (including MAC layer options).  However, those settings
    do not apply for the join procedure - end-devices are required to use
    a channel with a 250 octet frame size for the join procedure.
+
+
 
 
 
@@ -568,13 +568,14 @@ Internet-Draft                lora overview                 October 2016
 7.2.  Key Derivation
 
    When session keys are derived from the AppKey as a result of the join
-   procedure the Join-accept message payload is specially handled.  In
-   this case, the long-term AppKey is directly used to protect the Join-
-   accept message content, but the function used is not (as one might
-   expect) an aes-encrypt operation, but rather an aes-decrypt operaion.
-   The (frankly, weak) justification is that this means that the end-
-   device only needs to implement the aes-encrypt operation with the
-   AppKey as the key input.  (The counter mode variant for payload
+   procedure the Join-accept message payload is specially handled.
+
+   In this case, the long-term AppKey is directly used to protect the
+   Join-accept message content, but the function used is not (as one
+   might expect) an aes-encrypt operation, but rather an aes-decrypt
+   operation.  The (frankly, weak) justification is that this means that
+   the end-device only needs to implement the aes-encrypt operation with
+   the AppKey as the key input.  (The counter mode variant for payload
    decryption means the end-device doesn't need the aes-decrypt
    primitive.)
 
@@ -607,7 +608,6 @@ Internet-Draft                lora overview                 October 2016
    payload protection use what might otherwise be considered short
    counters/nonces.  These issues, and other potential changes to the
    details of cryptography are under disussion in the LoRa alliance.
-
 
 
 
@@ -737,11 +737,6 @@ Internet-Draft                lora overview                 October 2016
 
 11.  Informative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
-
    [RFC5116]  McGrew, D., "An Interface and Algorithms for Authenticated
               Encryption", RFC 5116, DOI 10.17487/RFC5116, January 2008,
               <http://www.rfc-editor.org/info/rfc5116>.
@@ -778,6 +773,11 @@ Authors' Addresses
    FR
 
    Email: alper.yegin@actility.com
+
+
+
+
+
 
 
 

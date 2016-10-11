@@ -105,10 +105,12 @@ that public?]]</t>
 
 	<section title="Terminology">
 
+<!--
 	  <t> [[Not sure if 2119 terms will be needed. Leave it here for now.]] The key
 words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
 NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t> 
+-->
 	
 
 	<t>This section introduces some LoRaWAN terms.</t>
@@ -509,10 +511,12 @@ AppSKey.</t>
 
 	<t>When session keys are derived from the AppKey as a result of
 the join procedure the Join-accept message payload is specially
-handled. In this case, the long-term AppKey is directly used to protect
+handled.</t> 
+
+<t>In this case, the long-term AppKey is directly used to protect
 the Join-accept message content, but the function used is not
 (as one might expect) an aes-encrypt operation, but rather an
-aes-decrypt operaion. The (frankly, weak) justification is that this means
+aes-decrypt operation. The (frankly, weak) justification is that this means
 that the end-device only needs to implement the aes-encrypt
 operation with the AppKey as the key input. (The counter 
 mode variant for payload decryption means the end-device
@@ -676,7 +680,9 @@ target="https://github.com/Lora-net/LoRaMac-node"/>.</t>
 
 <back>
    <references title="Informative References">
+<!--
       <?rfc include='reference.RFC.2119'?>
+-->
       <?rfc include='reference.RFC.5116'?>
       <?rfc include='reference.RFC.7942'?>
       &I-D.vilajosana-lpwan-lora-hc;
