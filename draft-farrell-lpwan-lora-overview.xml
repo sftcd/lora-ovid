@@ -71,11 +71,8 @@ providing IPv6 connectivity over LoRaWAN along with other LPWANs.
 	<t>[[Comments to be addressed before publication are in double square
 brackets like this one]]</t>
 
-	<t>[[As on 20161005 SF got to ~page32 of LoRaSpec, I'm working down
-that and extracting bits of interest to the various sections here.]]</t>
-
 	  <t> LoRaWAN is a wireless technology for long-range low-power
-low-data-rate applications developed by the LoRa Alliance, a pay-for-membership
+low-data-rate applications developed by the LoRa Alliance, a membership
 consortium.  <eref target="https://www.lora-alliance.org/"/> LoRaWAN networks
 are typically organized in a star-of-stars topology in which gateways relay
 messages between end-devices and a central "network server" in the backend.
@@ -93,9 +90,8 @@ multiple instances of the same uplink message from an end-device.</t>
 maximize both battery life of end-devices and overall network capacity, the
 LoRaWAN network infrastructure manages the data rate and RF output for each
 end-device individually by means of an adaptive data rate (ADR) scheme.
-[[This seems to contradict the previous sentence.]]
 End-devices may transmit on any channel available at any time, using any
-available data rate.  </t>
+of the currently available data rates.  </t>
 
 <t>This memo provides an overview of the LoRaWAN technology for
 the Internet community, but
@@ -121,9 +117,10 @@ interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t>
 	<t>End-device: a LoRa client device, sometimes called a mote. Communicates with gateways.</t>
 
 	<t>Gateway: a radio on the infrastructure-side, sometimes called a concentrator or base-station.
-	Communicates with gateways and, via the Internet, with a network server. [[one only?]]</t>
+	Communicates with end-devices and, via the Internet, with a network server. [[one only?]]</t>
 
-	<t>Network Server: [[does stuff]]</t>
+	<t>Network Server: Provides application layer functions as well as being the target
+for messages received from end-devices via gateways and vice-versa.</t>
 
 	<t>Classes A, B and C are classes of end-device. All LoRaWAN devices have
 bi-directional radios. The minimal end-device is class A and all devices need
@@ -132,7 +129,9 @@ receive slots allocated for better gateway to end-device bandwidth. Class C
 end-devices can receive at any time they are not sending and hence have even
 better inbound (to end-device) bandwidth. Classes B and C are not further 
 discussed in this memo. [[Are these really classes of device
-or modes of operation?]]</t>
+or modes of operation? Maybe omit classes B and C from the body of the
+draft for and provide some details in  an 
+appendix?]]</t>
 
 	<t>Uplink message: refers to communications from end-device to network server via one or
 more gateways. </t>
@@ -155,7 +154,9 @@ transmission to help make the system more robust to interference.</t>
 	<t>As with other LPWAN radio technologies, LoRaWAN end-devices respect the
 frequency, power and maximum transmit duty cycle requirements for the sub-band used and local
 regulations. In many cases, this means an end-device only transmitting for 1%
- of the time. The precise details of all of these are region specific and
+ of the time. In some cases the LoRaWAN specification calls for end-devices
+to transmit less often than is called for by the ISM band regulations in
+order to avoid congestion. The precise details of all of these are region specific and
 vary significantly, however there is (almost) always a specific time slot at 
 which the next transmission can be made.</t>
 
@@ -169,7 +170,9 @@ the end-device keeps the radio on in order to reeive the frame.
 </t>
 
 <t>End-devices can only transmit a 2nd uplink frame after the end
-of the associated receive windows.
+of the associated receive windows. When a device joins a LoRaWAN
+network (see <xref target="mac"/> for details), there are similar
+timeouts on parts of that process.
 </t>
 
 
@@ -185,107 +188,68 @@ of the associated receive windows.
 </artwork>
 </figure>
 
-	<t>[[Add some table(s) summarising the important bits from chapter 7,
-e.g. with min/max data rates, payload sizes, frequencies etc. Not sure
-how best to do that but min/max might be ok.]]</t>
-
-	<t>Given the different regional requirements the full specification
-for the LoRaWan physical layer is complex for example taking up more than 30 pages
-of the specification so we will not try to reproduce all of that here.
-Instead and mainly to illustrate the kinds of issue encountered, we present 
-the set of default settings for one ISM band (without fully explaining
-those here) and
-indicate the maxima and minima for various parameters of interest
-to those defining how to use IETF protocols over the LoRaWAN MAC
-layer.</t>
+	<t>Given the different regional requirements the full specification for the
+LoRaWan physical layer is complex (taking up more than 30 pages of
+the specification) so we will not try to reproduce all of that here.  Instead
+and mainly to illustrate the kinds of issue encountered, in 
+<xref target="table-ism868"/> we present some of the default settings for one
+ISM band (without fully explaining those here) and in <xref target="table-minmax"/>
+we describe maxima and
+minima for some parameters of interest to those defining ways to use IETF
+protocols over the LoRaWAN MAC layer.</t>
 
 <texttable anchor="table-ism868" title="Default settings for EU868MHz band">
     <ttcol align='center'>Parameters</ttcol>
     <ttcol align='center'>Default Value</ttcol>
-    <ttcol align='center'>Notes</ttcol>
-<c>
-Rx delay 1
-</c>
-<c>
-1 s
-</c>
-<c>
-</c>
-<c>
-Rx delay 2
-</c>
-<c>
-2 s (must be RECEIVE_DELAY1 + 1s)
-</c>
-<c>
-</c>
-<c>
-JOIN_ACCEPT_DELAY1
-</c>
-<c>
-5 s
-</c>
-<c>
-</c>
-<c>
-JOIN_ACCEPT_DELAY2
-</c>
-<c>
-6 s
-</c>
-<c>
-</c>
-<c>
-MAX_FCNT_GAP
-</c>
-<c>
-16384
-</c>
-<c>
-</c>
-<c>
-ADR_ACK_LIMIT
-</c>
-<c>
-64
-</c>
-<c>
-</c>
-<c>
-ADR_ACK_DELAY
-</c>
-<c>
-32
-</c>
-<c>
-</c>
-<c>
-ACK_TIMEOUT
-</c>
-<c>
-2 +/- 1 s (random delay between 1 and 3 seconds)
-</c>
-<c>
-</c>
+
+<c> Rx delay 1 </c>
+<c> 1 s </c>
+
+<c> Rx delay 2 </c>
+<c> 2 s (must be RECEIVE_DELAY1 + 1s) </c>
+
+<c> join delay 1 </c>
+<c> 5 s </c>
+
+<c> join delay 2 </c>
+<c> 6 s </c>
+
+<c>868MHz Default channels</c> 
+<c>3 (868.1,868.2,868.3), date rate: 0.3-5 kbps</c>
+
 </texttable>
 
 <texttable anchor="table-minmax" title="Minima and Maxima for various LoRaWAN Parameters">
     <ttcol align='left'>Parameter/Notes</ttcol>
     <ttcol align='center'>Min</ttcol>
     <ttcol align='center'>Max</ttcol>
-<c>Param: the name of the setting and a bit of explanatory text </c>
-<c>0</c>
-<c>89828828282</c>
 <c>Duty Cycle: some but not all ISM bands impose a limit in terms of how often an
 end-device can transmit. In some cases LoRaWAN is more stringent in an attempt to
 avoid congestion.</c>
 <c>1%</c>
 <c>no-limit</c>
-<c>868MHz band data rate/max-frame-size</c>
-<c>rate: 250 bits/s frame: 59</c>
-<c>rate: 50000 bits/s frame: 250</c>
+<c>EU 868MHz band data rate/frame-size</c>
+<c>250 bits/s : 59 octets</c>
+<c>50000 bits/s : 250 octets</c>
+
+<c>US 915MHz band data rate/frame-size</c>
+<c>980 bits/s : 19 octets </c>
+<c>21900 bits/s : 250 octets </c>
 
 </texttable>
+
+<t>Note that in the case of the smallest frame size (19 octets), 
+8 octets are required for LoRa MAC layer headers leaving only
+11 octets for payload (including MAC layer options). However, those
+settings do not apply for the join procedure - end-devices are
+required to use a channel with a 250 octet frame size for the
+join procedure.</t>
+
+<t>[[I'm not yet following what an end-device does if it needs
+to send a join-request >11 octets long via DR0 in the US915Mhz
+case. Does it only transmit on DR4?. P39, lines28-31 of
+the 1.0.1 spec aren't clear on that that I can see.]]</t>
+
 
 	</section>
 
@@ -293,7 +257,10 @@ avoid congestion.</c>
 
 	<t>Uplink and downlink higher layer data is carried in a MACPayload.  There
 is a concept of "ports" (an optional 8 bit value) to handle different
-applications on an end-device. The header also distinguishes different
+applications on an end-device. Port zero is reserved for LoRaWAN specific
+messaging, such as the join-procedure.</t> 
+
+<t>The header also distinguishes the uplink/downlink
 directions and whether or not an acknowledgement ("confirmation") is required
 from the peer.</t>
 
@@ -301,8 +268,6 @@ from the peer.</t>
 there are Join-Request and Join-Response (aka Join-Accept) messages for handling 
 network access. And so-called "MAC commands" up to 15 bytes long (e.g. for [[what]]) can be 
 piggybacked in an options field ("FOpts").</t>
-
-	<t>Payload lengths are variable with a maximum that is region-specific.</t>
 
 	<t>All payloads are encrypted  
 and ciphertexts are protected with a cryptographic
@@ -318,7 +283,7 @@ data rate (via MAC commands to the end-device).
 The network can also assert the ADR bit and control data rates at it's
 discretion.
 The goal is to ensure
-minimal on-time for radios whilst increasing throughput when possible.
+minimal on-time for radios whilst increasing throughput and reliability when possible.
 Other things being equal, the effect should be that end-devices closer to a 
 gateway can successfully use higher data rates, whereas end-devices
 further from all gateways still receive connectivity though at a lower
@@ -352,15 +317,15 @@ For example, one command allows the network server
 to ask an end-device to reduce it's duty-cycle to only
 use a proportion of the maximum allowed in a region. 
 Another, allows the network server to query the
-device as to it's power status with the response from
+end-device's power status with the response from
 the end-device specifying whether it has an external power 
 source or is battery powered (in which case a relative
-level is also sent to the network server).</t>
+battery level is also sent to the network server).</t>
 	
 	<t>The network server can also inform an end-device
 about channel assignments (mid-point frequencies and data
 rates). Of course, these must also remain within the
-bands assigned for the region.</t>
+bands assigned for the band and region.</t>
 
 
 
@@ -384,13 +349,17 @@ within the LoRA Alliance, so the situation here is somewhat fluid.)</t>
 device "joins" the network (see below for the join procedure) or
 that is pre-provisioned into the device.</t>
 
+<t>[[Ok, people will wonder, as do I: why the split of 32 into 7+25?
+That seems a bit odd, so likely worth explaining just to forstall
+the inevitable email queries.]]</t>
+
 	<t>End-devices are assumed to work with one or a quite limited 
 number of applications, which matches most LoRaWAN use-cases. The
 applications are identified by a 64-bit AppEUI, which is assumed
 to be a registered IEEE EUI64 value.</t>
 
 	<t>In addition, a device needs to have two symmetric session
-keys, one for protecting network artefacts (port=0), the NwkSkey,
+keys, one for protecting network artefacts (port=0), the NwkSKey,
 and another for protecting appliction layer traffic, the 
 AppSKey. Both keys are used for 128 bit AES cryptgraphic
 operations. (See <xref target="sec-cons"/> for details.)</t>
@@ -399,19 +368,26 @@ operations. (See <xref target="sec-cons"/> for details.)</t>
 plus channel information, 
 somehow (pre-)provisioned, in which case the end-device can
 simply start transmitting. This is achievable in many cases via
-out-of-band means given the nature of LoRaWAN networks.</t>
+out-of-band means given the nature of LoRaWAN networks.
+<xref target="table-nominal"/> summarises these values.
+</t>
 
-	<t>[[Add table of what's needed for nominal operation]]</t>
+<texttable anchor="table-nominal" title="Values required for nominal operation">
+    <ttcol align='left'>Value</ttcol>
+    <ttcol align='left'>Description</ttcol>
+<c>DevAddr</c> <c>DevAddr (32-bits) =  NwkId (7-bits) + device-specific address (25 bits)</c>
+<c>AppEUI </c> <c> IEEE EUI64 naming the application</c>
+<c>NwkSKey </c> <c> 128 bit network session key for use with AES</c>
+<c>AppSKey </c> <c> 128 bit application session key for use with AES</c> 
+</texttable>
 
 	<t>As an alternative, end-devices can use the LoRaWAN
-Join procedure in order to setup some
+join procedure in order to setup some
 of these values and dynamically gain access to the network.</t>
 
-	<t>To use the Join interaction, an end-device must still
-know the same AppEUI, plus some other items and the remaining pieces 
-of information above are then derived from the Join procedure.</t>
-	
-	<t>In addition to the AppEUI, end-devices using the Join procedure
+	<t>To use the join procedure, an end-device must still
+know the AppEUI.
+	In addition to the AppEUI, end-devices using the join procedure
 need to also know a different (long-term) symmetric key  that
 is bound to the AppEUI - this is the application key (AppKey),
 and is distinct from the application session key (AppSKey). The
@@ -419,33 +395,41 @@ AppKey is required to be specific to the device, that is,
 each end-device should have a different AppKey value. And
 finally the end-device also needs a long-term identifier for
 itself, syntactically also an EUI-64, and known as the 
-device EUI or DevEUI.</t> 
+device EUI or DevEUI. <xref target="table-join"/> summarises
+these values.</t> 
 
-	<t>The Join procedure involves a special exchange where
+<texttable anchor="table-join" title="Values required for join procedure">
+    <ttcol align='left'>Value</ttcol>
+    <ttcol align='left'>Description</ttcol>
+<c>DevEUI </c> <c> IEEE EUI64 naming the device</c>
+<c>AppEUI </c> <c> IEEE EUI64 naming the application</c>
+<c>AppKey </c> <c> 128 bit long term application key for use with AES</c> 
+</texttable>
+
+	<t>The join procedure involves a special exchange where
 the end-device asserts the AppEUI and DevEUI (integrity 
-protected with the long-term AppKey, but not encrypted) in a join-request
+protected with the long-term AppKey, but not encrypted) in a Join-request
 uplink message. This 
 is then routed to the network server which interacts with
-an entity that knows that AppKey to verify the join-request.
-All going well, a join-accept downlink message is returned
-to the end-device that specifies the 24-bit NetID, 32-bit
+an entity that knows that AppKey to verify the Join-request.
+All going well, a Join-accept downlink message is returned
+from the network server to the end-device that specifies the 24-bit NetID, 32-bit
 DevAddr
 and channel information and from which the AppSKey and
-NwkSKey can be derived.</t>
+NwkSKey can be derived based on knowledge of the AppKey.
+This provides the end-device with all the values listed
+in <xref target="table-nominal"/>.</t>
 
 	<t>There is some special handling related to which channels 
 to use and for multiple transmissions for the join-request which
 is intended to ensure a successful join in as many cases as
-possible. Join-request and join-accept messages also incldue
+possible. Join-request and Join-accept messages also incldue
 some random values (nonces) to both provide some replay 
 protection and to help ensure the session keys are unique
-per Join. If a join-request is not validated, then no join-accept
+per run of the join procedure. If a Join-request fails validation, then no Join-accept
 message (indeed no message at all) is returned to the end-device.
 If an end-device is reset then it should end up in a
-state in which it can re-do the Join procedure. </t>
-
-	<t>[[Add a table with the Join procedure inputs and
-results]]</t>
+state in which it can re-do the join procedure. </t>
 
 
 </section>
@@ -483,41 +467,124 @@ full specification for LoRaWAN security but to be sufficient so
 that future IETF specifications can encompass the required
 security considerations.</t>
 
-	<section anchor="key-mgmt" title="Activation/Personalisation and Key Management">
-
-	<t>Keying for MAC layer payloads is specific to the port ("FPort").</t>
-
-	<t>[[explain nw and app keys]]</t>
-
-	<t>[[explain join special case]]</t>
-
-	<t>[[explain when re-keying happens/is-needed]]</t>
-
-	</section>
-
-
 	<section anchor="crypto" title="Payload Encryption and Data Integrity">
 
 	<t>All payloads are encrypted and have data integrity. Frame options
-(used for MAC commands) when sent as a payload (FPort==0) are therefore 
+(used for MAC commands) when sent as a payload (port zero) are therefore 
 protected. MAC commands piggy-backed as frame options ("FOpts") are
-sent in clear.</t>
+however sent in clear.</t>
+
+	<t>For LoRaWAN version 1.0.x, the NetWSkey session key is used
+to provide data integrity between the end-device and the network
+server. The AppSKey is used to provide data confidentiality between
+the end-device and network server, or to the application "behind"
+the network server, depening on the implementation of the 
+network. [[CHECK]].</t>
+
+	<t>This way of providing data integity and confidentiality 
+differs from today's more common case where an
+authenticated encryption with additional data (AEAD) mode
+of operation <xref target="RFC5116"/> provides both 
+data integrity and confidentiality based on the same session
+key. (This could change in future versions of LoRaWAN.) 
+Note though that at least in principle the endpoints for
+the LoRaWAN data integrity and confidentiality services might
+not be operated by the same entities.</t>
+
+	<t>Gateways are not expected to be provided with the AppSKey
+or NwkSKey, all of the infrastructure-side cryptography happens
+in (or "behind") the network server. [[CHECK]].</t>
 
 	<t>All MAC layer messages have an outer 32-bit Message Integrity Code (MIC) calculated
-using AES-CMAC calculated over the ciphertext payload and other headers.</t>
+using AES-CMAC calculated over the ciphertext payload and other headers and
+using the NwkSkey.</t>
 
 	<t>Payloads are encrypted using 
-AES-128, with a counter-mode dervived from IEEE 802.15.4. [[add ref]] </t>
+AES-128, with a counter-mode dervived from IEEE 802.15.4 using the
+AppSKey.</t>
+
+	</section>
+
+	<section title="Key Derivation">
+
+	<t>When session keys are derived from the AppKey as a result of
+the join procedure the Join-accept message payload is specially
+handled. In this case, the long-term AppKey is directly used to protect
+the Join-accept message content, but the function used is not
+(as one might expect) an aes-encrypt operation, but rather an
+aes-decrypt operaion. The (frankly, weak) justification is that this means
+that the end-device only needs to implement the aes-encrypt
+operation with the AppKey as the key input. (The counter 
+mode variant for payload decryption means the end-device
+doesn't need the aes-decrypt primitive.)</t>
+
+	<t>The Join-accept plaintext is always less than 
+16 bytes long, so electronic code book (ECB) mode is used
+for protecting Join-accept messages.</t>
+
+	<t>In any case the Join-accept contains an AppNonce (a 
+24 bit value) that is recovered on the end-device along
+with the other Join-accept content (e.g. DevAddr) using
+an aes-encrypt operation.</t> 
+
+	<t>Once the Join-accept payload is available to
+the end-device the session keys are derived from the
+AppKey, AppNonce and other values again using an
+aes-encrypt operation, and again in ECB mode, with
+the plaintext input being a maximum of 16 octets.</t>
+
+	</section>
+
+	<section title="Cryptographic Optimisations">
+
+	<t>The LoRaWAN specification was developed in a small
+community and it's use of cryptography was arguably 
+over-optimised for the initially known use-cases
+without taking into account the full set of 
+best current practices common in the IETF.</t> 
+
+<t>In
+particular:
+	standard AEAD modes of operation are not used; 
+no standard key derivation function (KDF) is
+used;
+	there is no concept of regular re-keying, but any device
+that loses state can repeat the join procedure and
+hence acquire new session keys; there is no
+concept of algorithm agility other than via 
+changes to the overall LoRaWAN MAC protocol and
+some of the replay-protection aspects of payload
+protection use what might otherwise be considered
+short counters/nonces.
+These issues, and other potential changes to the
+details of cryptography
+are under disussion in the LoRa alliance.</t>
 
 	</section>
 
 	<section anchor="other-sec-cons" title="Other Security and Privacy Considerations">
 
-	<t>[[LoRaWAN has no built-in s/w update. That's a risk. And one it'd
-be good to try fix in general. I can imageine that might be a wrench for
-some folks.]]</t>
+	<t>Other security and privacy issues of note include:
 
-	<t>[[Describe privacy issues.]]</t>
+<list style="symbols">
+
+	<t>LoRaWAN has no built-in handling of software update. While
+this is commonly the case, it is perhaps unfortunate.</t>
+
+	<t>Sending the DevEUI in clear during the join procedure 
+allows the end-device to be (re-)identified by an eavesdropper.</t>
+
+	<t>The payload confidentiality mechanism exposes the 
+exact length of payloads with no built-in opportunity
+for padding. For some (perhaps many) LPWAN applications
+this could be sensitive and could expose the plaintext.</t>
+
+	<t>Since MAC commands may be sent as options and not
+only as payload, any values sent are visible to a passive
+attacker but are not malleable for an active attacker
+due to the use of the MIC.</t>
+
+</list></t>
 
 	</section>
  	  
@@ -610,6 +677,7 @@ target="https://github.com/Lora-net/LoRaMac-node"/>.</t>
 <back>
    <references title="Informative References">
       <?rfc include='reference.RFC.2119'?>
+      <?rfc include='reference.RFC.5116'?>
       <?rfc include='reference.RFC.7942'?>
       &I-D.vilajosana-lpwan-lora-hc;
 
