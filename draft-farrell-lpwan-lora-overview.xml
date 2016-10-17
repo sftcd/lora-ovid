@@ -57,8 +57,8 @@ application layer data sizes and long battery life operation.  One of these
 technologies is LoRaWAN developed by the LoRa Alliance.  LoRaWAN targets key
 requirements of the Internet of things such as secure bi-directional
 communication, mobility and localization services.  This memo is an
-informational overview of LoRaWAN and gives the principal characteristics and
-restrictions of this technology in order to help with the IETF work for
+informational overview of LoRaWAN and gives the principal characteristics 
+of this technology in order to help with the IETF work for
 providing IPv6 connectivity over LoRaWAN along with other LPWANs.
 
       </t>
@@ -97,9 +97,12 @@ of the currently available data rates.  </t>
 the Internet community, but
 the definitive specification 
       <xref target="LoRaSpec"/>
-is that produced by the LoRa Alliance. [[What is the right version
-on which to base this? I'm using 1.0.1 from Feb 2016 for now. Is
-that public?]]</t>
+is that produced by the LoRa Alliance. 
+This draft is based on version 1.0.2 of the LoRa specification.
+(Note that version 1.0.2 is expected to be published in a few
+weeks. We will update this draft when that has happened. For now,
+version 1.0 is available at <xref target="LoRaSpec1.0"/>)
+</t>
 
    </section>
 
@@ -119,21 +122,22 @@ interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t>
 	<t>End-device: a LoRa client device, sometimes called a mote. Communicates with gateways.</t>
 
 	<t>Gateway: a radio on the infrastructure-side, sometimes called a concentrator or base-station.
-	Communicates with end-devices and, via the Internet, with a network server. [[one only?]]</t>
+	Communicates with end-devices and, via the Internet, with a network server. </t>
 
-	<t>Network Server: Provides application layer functions as well as being the target
-for messages received from end-devices via gateways and vice-versa.</t>
+	<t>Network Server: The Network Server (NS) terminates the LoRaWAN MAC layer
+for the devices connected to the network. It is the center of the star
+topology.
+</t>
 
-	<t>Classes A, B and C are classes of end-device. All LoRaWAN devices have
+	<t>Classes A, B and C define different device capabilities and
+modes of operation for end-devices. All LoRaWAN devices have
 bi-directional radios. The minimal end-device is class A and all devices need
 to support acting as a class A device. Class B have additional end-device
 receive slots allocated for better gateway to end-device bandwidth. Class C
 end-devices can receive at any time they are not sending and hence have even
 better inbound (to end-device) bandwidth. Classes B and C are not further 
-discussed in this memo. [[Are these really classes of device
-or modes of operation? Maybe omit classes B and C from the body of the
-draft for and provide some details in  an 
-appendix?]]</t>
+discussed in this memo. 
+</t>
 
 	<t>Uplink message: refers to communications from end-device to network server via one or
 more gateways. </t>
@@ -159,7 +163,7 @@ regulations. In many cases, this means an end-device only transmitting for 1%
  of the time. In some cases the LoRaWAN specification calls for end-devices
 to transmit less often than is called for by the ISM band regulations in
 order to avoid congestion. The precise details of all of these are region specific and
-vary significantly, however there is (almost) always a specific time slot at 
+vary significantly, however for class A end-devices there is (almost) always a specific time slot at 
 which the next transmission can be made.</t>
 
       <t>
@@ -171,7 +175,7 @@ If a downlink message preamble is detected during a receive window, then
 the end-device keeps the radio on in order to reeive the frame.
 </t>
 
-<t>End-devices can only transmit a 2nd uplink frame after the end
+<t>End-devices can only transmit a subsequent uplink frame after the end
 of the associated receive windows. When a device joins a LoRaWAN
 network (see <xref target="mac"/> for details), there are similar
 timeouts on parts of that process.
@@ -190,9 +194,9 @@ timeouts on parts of that process.
 </artwork>
 </figure>
 
-	<t>Given the different regional requirements the full specification for the
-LoRaWan physical layer is complex (taking up more than 30 pages of
-the specification) so we will not try to reproduce all of that here.  Instead
+	<t>Given the different regional requirements the detailed specification for the
+LoRaWan physical layer (taking up more than 30 pages of
+the specification) is not reproduced here.  Instead
 and mainly to illustrate the kinds of issue encountered, in 
 <xref target="table-ism868"/> we present some of the default settings for one
 ISM band (without fully explaining those here) and in <xref target="table-minmax"/>
@@ -244,13 +248,9 @@ avoid congestion.</c>
 8 octets are required for LoRa MAC layer headers leaving only
 11 octets for payload (including MAC layer options). However, those
 settings do not apply for the join procedure - end-devices are
-required to use a channel with a 250 octet frame size for the
+required to use a channel that can send the 23 byte Join-request
+message for the 
 join procedure.</t>
-
-<t>[[I'm not yet following what an end-device does if it needs
-to send a join-request >11 octets long via DR0 in the US915Mhz
-case. Does it only transmit on DR4?. P39, lines28-31 of
-the 1.0.1 spec aren't clear on that that I can see.]]</t>
 
 
 	</section>
@@ -268,7 +268,7 @@ from the peer.</t>
 
 <t>In addition to carrying higher layer PDUs
 there are Join-Request and Join-Response (aka Join-Accept) messages for handling 
-network access. And so-called "MAC commands" up to 15 bytes long (e.g. for [[what]]) can be 
+network access. And so-called "MAC commands" (see below) up to 15 bytes long can be 
 piggybacked in an options field ("FOpts").</t>
 
 	<t>All payloads are encrypted  
@@ -355,10 +355,18 @@ that is pre-provisioned into the device.</t>
 That seems a bit odd, so likely worth explaining just to forstall
 the inevitable email queries.]]</t>
 
+<t>[[Alper suggests not distinguishing the 32-bit DevAddr into 7-bit NwkID and
+25-bit address. SF not sure:-) Need to check if that'd be misleading to a
+reader.]]</t>
+
 	<t>End-devices are assumed to work with one or a quite limited 
 number of applications, which matches most LoRaWAN use-cases. The
 applications are identified by a 64-bit AppEUI, which is assumed
 to be a registered IEEE EUI64 value.</t>
+
+<t>[[Even though AppEUI will be renamed in R1.1 to JoinEUI, it's
+better described to match the published spec for now. Can be
+updated to refelect R1.1 when the I-D is.]]</t>
 
 	<t>In addition, a device needs to have two symmetric session
 keys, one for protecting network artefacts (port=0), the NwkSKey,
@@ -436,30 +444,6 @@ state in which it can re-do the join procedure. </t>
 
 </section>
 
-	<section title="Planned Changes">
-	
-	<t>As with many LPWAN technologies LoRaWAN is constantly evolving both
-in details and in the large. For example, some detailed changes to the
-cryptography used are being discussed within the LoRa Alliance. Whether or
-not those result in backawards incompatible changes (things that affect
-ciphertext usually do), will be apparent in the the latest LoRaWAN
-specification.</t>
-
-	<t>Various LoRaWAN message formats including the MAC layer have 
-bits allocated that would allow for future changes to formats. In
-such cases, gateways and network-servers will be expected to support
-earlier releases, whereas end-devices may only support one version.</t>
-
-	<t>There is also some scope for vendor-specific ("proprietary") 
-extensions to MAC layer messages.</t>
-
-	<t>Larger changes are being considered in terms of connecting together
-multiple networks and allowing end-devices to roam over different networks.
-These changes are expected to become stable in 2017. [[Just a guess, maybe
-we don't want to say stuff like that, but no harm to let folks know roughly
-what's likely to change in the lifetime of the LPWAN WG.]]</t>
-
-	</section>
 
    <section anchor="sec-cons" title="Security Considerations">
 
@@ -481,7 +465,11 @@ to provide data integrity between the end-device and the network
 server. The AppSKey is used to provide data confidentiality between
 the end-device and network server, or to the application "behind"
 the network server, depening on the implementation of the 
-network. [[CHECK]].</t>
+network. </t>
+
+	<t>[[Alper suggests omitting most of the rest of section 7.
+SF would prefer to keep it as we'll be asked anyway (I would
+ask us:-)]]</t>
 
 	<t>This way of providing data integity and confidentiality 
 differs from today's more common case where an
@@ -495,7 +483,7 @@ not be operated by the same entities.</t>
 
 	<t>Gateways are not expected to be provided with the AppSKey
 or NwkSKey, all of the infrastructure-side cryptography happens
-in (or "behind") the network server. [[CHECK]].</t>
+in (or "behind") the network server. </t>
 
 	<t>All MAC layer messages have an outer 32-bit Message Integrity Code (MIC) calculated
 using AES-CMAC calculated over the ciphertext payload and other headers and
@@ -687,17 +675,32 @@ target="https://github.com/Lora-net/LoRaMac-node"/>.</t>
       <?rfc include='reference.RFC.7942'?>
       &I-D.vilajosana-lpwan-lora-hc;
 
-      <reference anchor="LoRaSpec" target="https://www.lora-alliance.org/portals/0/specs/LoRaWAN%20Specification%201R0.pdf">
+      <reference anchor="LoRaSpec" target="URL TBD">
          <front>
             <title>
-               LoRaWAN Specification Version V1.0.1
+               LoRaWAN Specification Version V1.0.2
             </title>
             <author>
                <organization>LoRa Alliance</organization>
             </author>
-            <date month="Feb" year="2016"/>
+            <date month="Nov" year="2016"/>
          </front>
       </reference>
+
+      <reference anchor="LoRaSpec1.0" target="https://www.lora-alliance.org/portals/0/specs/LoRaWAN%20Specification%201R0.pdf">
+         <front>
+            <title>
+               LoRaWAN Specification Version V1.0
+            </title>
+            <author>
+               <organization>LoRa Alliance</organization>
+            </author>
+            <date month="Jan" year="2015"/>
+         </front>
+      </reference>
+
 	</references>
+
+
 </back>
 </rfc>
