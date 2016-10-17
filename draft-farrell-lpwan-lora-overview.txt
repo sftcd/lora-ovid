@@ -79,10 +79,10 @@ Table of Contents
      6.3.  Cryptographic Optimisations . . . . . . . . . . . . . . .  10
      6.4.  Privacy . . . . . . . . . . . . . . . . . . . . . . . . .  11
      6.5.  Software Update . . . . . . . . . . . . . . . . . . . . .  11
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
    9.  Informative References  . . . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction
 
@@ -578,9 +578,10 @@ Internet-Draft                lora overview                 October 2016
    Internet Architecture Board's recommendation on Internet
    confidentiality [iab-confid] which calls for these services to be
    applied at multiple layers.  It is notable that that is also fully
-   consistent with new IETF work at other layers, e.g. both the QUIC
-   protocol and LoRaWAN embed confidentiality and integrity into the
-   protocol as first class features from the start.
+   consistent with new IETF work at other layers, e.g. both the proposed
+   QUIC protocol [I-D.hamilton-quic-transport-protocol] and LoRaWAN
+   embed confidentiality and integrity into the protocol as first class
+   features from the start.
 
 6.4.  Privacy
 
@@ -605,9 +606,8 @@ Internet-Draft                lora overview                 October 2016
    consider whether the WG might address this issue.  (Full disclosure:
    one of the authors of this draft (SF) hosted the IoTSU workshop.)
 
-7.  IANA Considerations
 
-   There are no IANA considerations related to this memo.
+
 
 
 
@@ -617,6 +617,10 @@ Farrell & Yegin          Expires April 20, 2017                [Page 11]
 
 Internet-Draft                lora overview                 October 2016
 
+
+7.  IANA Considerations
+
+   There are no IANA considerations related to this memo.
 
 8.  Acknowledgements
 
@@ -645,6 +649,12 @@ Internet-Draft                lora overview                 October 2016
               draft-farrell-iotsu-workshop-01 (work in progress),
               October 2016.
 
+   [I-D.hamilton-quic-transport-protocol]
+              Hamilton, R., Iyengar, J., Swett, I., and A. Wilk, "QUIC:
+              A UDP-Based Multiplexed and Secure Transport", draft-
+              hamilton-quic-transport-protocol-00 (work in progress),
+              July 2016.
+
    [LoRaSpec]
               LoRa Alliance, "LoRaWAN Specification Version V1.0.2", Nov
               2016, <URL TBD>.
@@ -653,16 +663,6 @@ Internet-Draft                lora overview                 October 2016
               LoRa Alliance, "LoRaWAN Specification Version V1.0", Jan
               2015, <https://www.lora-alliance.org/portals/0/specs/
               LoRaWAN%20Specification%201R0.pdf>.
-
-   [iab-confid]
-              Internet Architecture Board, "IAB Statement on Internet
-              Confidentiality", Nov 2014,
-              <https://www.iab.org/documents/correspondence-reports-
-              documents/2014-2/iab-statement-on-internet-
-              confidentiality/>.
-
-Authors' Addresses
-
 
 
 
@@ -673,6 +673,15 @@ Farrell & Yegin          Expires April 20, 2017                [Page 12]
 
 Internet-Draft                lora overview                 October 2016
 
+
+   [iab-confid]
+              Internet Architecture Board, "IAB Statement on Internet
+              Confidentiality", Nov 2014,
+              <https://www.iab.org/documents/correspondence-reports-
+              documents/2014-2/iab-statement-on-internet-
+              confidentiality/>.
+
+Authors' Addresses
 
    Stephen Farrell
    Trinity College Dublin
@@ -689,15 +698,6 @@ Internet-Draft                lora overview                 October 2016
    FR
 
    Email: alper.yegin@actility.com
-
-
-
-
-
-
-
-
-
 
 
 

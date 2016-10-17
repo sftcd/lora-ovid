@@ -3,6 +3,7 @@
 
 <!ENTITY I-D.vilajosana-lpwan-lora-hc SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.vilajosana-lpwan-lora-hc">
 <!ENTITY I-D.farrell-iotsu-workshop SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.farrell-iotsu-workshop">
+<!ENTITY I-D.hamilton-quic-transport-protocol SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.hamilton-quic-transport-protocol">
 ]>
 
 <?rfc toc="yes"?>
@@ -560,7 +561,8 @@ recommendation on Internet confidentiality
 <xref target="iab-confid"/>
 which calls for these services to be applied at multiple layers.
 It is notable that that is also fully consistent with
-new IETF work at other layers, e.g. both the QUIC protocol and LoRaWAN embed
+new IETF work at other layers, e.g. both the proposed QUIC protocol 
+<xref target="I-D.hamilton-quic-transport-protocol"/> and LoRaWAN embed
 confidentiality and integrity into the protocol as first class features from
 the start.</t>
 
@@ -689,6 +691,7 @@ we get that organised and it looks useful.]]</t>
 -->
       &I-D.vilajosana-lpwan-lora-hc;
       &I-D.farrell-iotsu-workshop;
+      &I-D.hamilton-quic-transport-protocol;
 
       <reference anchor="LoRaSpec" target="URL TBD">
          <front>
