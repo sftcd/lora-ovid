@@ -70,10 +70,9 @@ providing IPv6 connectivity over LoRaWAN along with other LPWANs.
 <middle>
    <section title="Introduction">
 
-<!--
 	<t>[[Comments to be addressed before publication are in double square
-brackets like this one]]</t>
--->
+brackets like this one. Note to self: clean out the xml comments from
+the source file before publication.]]</t>
 
 	  <t> LoRaWAN is a wireless technology for long-range low-power
 low-data-rate applications developed by the LoRa Alliance, a membership
@@ -177,7 +176,7 @@ turns on its receiver for two short receive windows that are offset from
 the end of the transmission window. The frequencies and data rate chosen
 for these receive windows depend on those used for the transmit window.
 If a downlink message preamble is detected during a receive window, then
-the end-device keeps the radio on in order to reeive the frame.
+the end-device keeps the radio on in order to receive the frame.
 </t>
 
 <t>End-devices can only transmit a subsequent uplink frame after the end
@@ -265,21 +264,21 @@ join procedure.</t>
 	<t>Uplink and downlink higher layer data is carried in a MACPayload.  There
 is a concept of "ports" (an optional 8 bit value) to handle different
 applications on an end-device. Port zero is reserved for LoRaWAN specific
-messaging, such as the join-procedure.</t> 
+messaging, such as the join procedure.</t> 
 
 <t>The header also distinguishes the uplink/downlink
 directions and whether or not an acknowledgement ("confirmation") is required
 from the peer.</t>
 
-<t>In addition to carrying higher layer PDUs
-there are Join-Request and Join-Response (aka Join-Accept) messages for handling 
-network access. And so-called "MAC commands" (see below) up to 15 bytes long can be 
-piggybacked in an options field ("FOpts").</t>
-
 	<t>All payloads are encrypted  
 and ciphertexts are protected with a cryptographic
 Message Integrity Check (MIC) 
 - see <xref target="sec-cons"/> for details.</t>
+
+<t>In addition to carrying higher layer PDUs
+there are Join-Request and Join-Response (aka Join-Accept) messages for handling 
+network access. And so-called "MAC commands" (see below) up to 15 bytes long can be 
+piggybacked in an options field ("FOpts").</t>
 
 
 	<t>LoRaWAN end-devices can choose various different data rates from a menu
@@ -323,7 +322,7 @@ command.</t>
 For example, one command allows the network server
 to ask an end-device to reduce it's duty-cycle to only
 use a proportion of the maximum allowed in a region. 
-Another, allows the network server to query the
+Another allows the network server to query the
 end-device's power status with the response from
 the end-device specifying whether it has an external power 
 source or is battery powered (in which case a relative
@@ -344,7 +343,7 @@ bands assigned for the band and region.</t>
 seven bit value.  A private network (common for LoRaWAN) can use the value 
 zero. If
 a network wishes to support "foreign" end-devices then the NwkID
-needs to be registered with the LoRA alliance, in which case the
+needs to be registered with the LoRA Alliance, in which case the
 NwkID is the seven least significant bits of a registered 24-bit
 NetID. (Note however, that
 the methods for "roaming" are currently being enhanced
@@ -456,23 +455,21 @@ state in which it can re-do the join procedure. </t>
 
    <section anchor="sec-cons" title="Security Considerations">
 
-	<t>In this section we describe the use of cryptography and other
-security considerations arising. This section is not intended as a
-full specification for LoRaWAN security but to be sufficient so
+	<t>In this section we describe the use of cryptography in LoRaWAN.
+This section is not intended as a
+full specification but to be sufficient so
 that future IETF specifications can encompass the required
 security considerations. The emphasis is on describing the
-externally visible characteristics of LoRaWAN so this is not 
-intended to be a full security analysis.</t>
+externally visible characteristics of LoRaWAN.</t>
 
 	<section anchor="crypto" title="Payload Encryption and Data Integrity">
 
 	<t>All payloads are encrypted and have data integrity. Frame options
 (used for MAC commands) when sent as a payload (port zero) are therefore 
 protected. MAC commands piggy-backed as frame options ("FOpts") are
-however sent in clear.</t>
-
-	<t>Since MAC commands may be sent as options and not
-only as payload, any values sent are visible to a passive
+however sent in clear.
+	Since MAC commands may be sent as options and not
+only as payload, any values sent in that manner are visible to a passive
 attacker but are not malleable for an active attacker
 due to the use of the MIC.</t>
 
@@ -495,6 +492,7 @@ AppSKey.</t>
 all of the infrastructure-side cryptography happens in (or "behind") the
 network server. </t>
 
+<!--
 	<t>This way of providing data integrity and confidentiality differs from
 today's more common IETF case where an authenticated encryption with additional
 data (AEAD) mode of operation <xref target="RFC5116"/> provides both data
@@ -502,6 +500,7 @@ integrity and confidentiality based on the same session key.
 The goal of the current design is to
 efficiently support cases where the endpoints for the LoRaWAN data integrity
 and confidentiality services might not be operated by the same entities.</t>
+-->
 
 	</section>
 
@@ -537,6 +536,8 @@ the plaintext input being a maximum of 16 octets.</t>
 
 	</section>
 
+<!--
+
 	<section title="Cryptographic Optimisations">
 
 	<t>The use of cryptography in the LoRaWAN MAC layer was designed to be
@@ -550,8 +551,8 @@ mechanism today; AEAD modes are not used; a standard key derivation function
 (KDF) is not used; there is no concept of re-keying separate from the
 Join-procedure; there is no concept of algorithm agility other than via changes
 to the overall LoRaWAN MAC protocol and aspects of the replay-protection use
-what might in other contexts be considered short counters/nonces.  Theses
-issues remain under disussion withinn the LoRa alliance and over time one can
+what might in other contexts be considered short counters/nonces.  These
+issues remain under disussion withinn the LoRa Alliance and over time one can
 expect better convergence between the requirements faced in the LPWAN arena
 with those more familiar in the IETF context.</t>
 
@@ -574,7 +575,7 @@ the start.</t>
 
 	<t>Sending the DevEUI in clear during the join procedure allows the
 end-device to be (re-)identified by an eavesdropper.  That said, the DevAddr
-can be entirely different after each run of the join-procedure giving
+can be entirely different after each run of the join procedure giving
 implementations some scope to partially enhance privacy.</t>
 
 	<t>The absence of padding could expose private inforation, or the
@@ -595,6 +596,8 @@ to at least consider whether the WG might address this issue. (Full disclosure:
 one of the authors of this draft (SF) hosted the IoTSU workshop.) </t>
 
 </section>
+
+-->
 
 
  	  
@@ -678,20 +681,32 @@ we get that organised and it looks useful.]]</t>
 
 -->
 
+<section title="Contributors">
+
+<t>The following members of the LoRa Alliance reviewed this draft
+and contributed (much more than SF) to the definition of LoRaWAN.</t>
+
+<t><list>
+	<t>Name, Affiliation, email (optional)</t>
+</list></t>
+</section>
+
 </middle>
 
 <back>
    <references title="Informative References">
 <!--
       <?rfc include='reference.RFC.2119'?>
--->
       <?rfc include='reference.RFC.5116'?>
+-->
 <!--
       <?rfc include='reference.RFC.7942'?>
 -->
       &I-D.vilajosana-lpwan-lora-hc;
+<!--
       &I-D.farrell-iotsu-workshop;
       &I-D.hamilton-quic-transport-protocol;
+-->
 
       <reference anchor="LoRaSpec" target="URL TBD">
          <front>
@@ -717,6 +732,7 @@ we get that organised and it looks useful.]]</t>
          </front>
       </reference>
 
+<!--
       <reference anchor="iab-confid" target="https://www.iab.org/documents/correspondence-reports-documents/2014-2/iab-statement-on-internet-confidentiality/">
          <front>
             <title>
@@ -728,9 +744,9 @@ we get that organised and it looks useful.]]</t>
             <date month="Nov" year="2014"/>
          </front>
       </reference>
+-->
 
 	</references>
-
 
  </back>
 </rfc>

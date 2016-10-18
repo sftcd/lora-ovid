@@ -5,8 +5,8 @@
 lpwan                                                         S. Farrell
 Internet-Draft                                    Trinity College Dublin
 Intended status: Informational                                  A. Yegin
-Expires: April 20, 2017                                         Actility
-                                                        October 17, 2016
+Expires: April 21, 2017                                         Actility
+                                                        October 18, 2016
 
 
                             LoRaWAN Overview
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 20, 2017.
+   This Internet-Draft will expire on April 21, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 1]
+Farrell & Yegin          Expires April 21, 2017                 [Page 1]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -76,15 +76,17 @@ Table of Contents
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
      6.1.  Payload Encryption and Data Integrity . . . . . . . . . .   9
      6.2.  Key Derivation  . . . . . . . . . . . . . . . . . . . . .  10
-     6.3.  Cryptographic Optimisations . . . . . . . . . . . . . . .  10
-     6.4.  Privacy . . . . . . . . . . . . . . . . . . . . . . . . .  11
-     6.5.  Software Update . . . . . . . . . . . . . . . . . . . . .  11
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
-   9.  Informative References  . . . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
+   9.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  11
+   10. Informative References  . . . . . . . . . . . . . . . . . . .  11
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
+
+   [[Comments to be addressed before publication are in double square
+   brackets like this one.  Note to self: clean out the xml comments
+   from the source file before publication.]]
 
    LoRaWAN is a wireless technology for long-range low-power low-data-
    rate applications developed by the LoRa Alliance, a membership
@@ -104,16 +106,16 @@ Table of Contents
 
    To maximize both battery life of end-devices and overall network
    capacity, the LoRaWAN network infrastructure manages the data rate
-   and RF output for each end-device individually by means of an
-   adaptive data rate (ADR) scheme.  End-devices may transmit on any
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 2]
+Farrell & Yegin          Expires April 21, 2017                 [Page 2]
 
 Internet-Draft                lora overview                 October 2016
 
 
+   and RF output for each end-device individually by means of an
+   adaptive data rate (ADR) scheme.  End-devices may transmit on any
    channel available at any time, using any of the currently available
    data rates.
 
@@ -163,9 +165,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-
-
-Farrell & Yegin          Expires April 20, 2017                 [Page 3]
+Farrell & Yegin          Expires April 21, 2017                 [Page 3]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -192,7 +192,7 @@ Internet-Draft                lora overview                 October 2016
    rate chosen for these receive windows depend on those used for the
    transmit window.  If a downlink message preamble is detected during a
    receive window, then the end-device keeps the radio on in order to
-   reeive the frame.
+   receive the frame.
 
    End-devices can only transmit a subsequent uplink frame after the end
    of the associated receive windows.  When a device joins a LoRaWAN
@@ -221,7 +221,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 4]
+Farrell & Yegin          Expires April 21, 2017                 [Page 4]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -277,7 +277,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 5]
+Farrell & Yegin          Expires April 21, 2017                 [Page 5]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -287,20 +287,20 @@ Internet-Draft                lora overview                 October 2016
    Uplink and downlink higher layer data is carried in a MACPayload.
    There is a concept of "ports" (an optional 8 bit value) to handle
    different applications on an end-device.  Port zero is reserved for
-   LoRaWAN specific messaging, such as the join-procedure.
+   LoRaWAN specific messaging, such as the join procedure.
 
    The header also distinguishes the uplink/downlink directions and
    whether or not an acknowledgement ("confirmation") is required from
    the peer.
 
+   All payloads are encrypted and ciphertexts are protected with a
+   cryptographic Message Integrity Check (MIC) - see Section 6 for
+   details.
+
    In addition to carrying higher layer PDUs there are Join-Request and
    Join-Response (aka Join-Accept) messages for handling network access.
    And so-called "MAC commands" (see below) up to 15 bytes long can be
    piggybacked in an options field ("FOpts").
-
-   All payloads are encrypted and ciphertexts are protected with a
-   cryptographic Message Integrity Check (MIC) - see Section 6 for
-   details.
 
    LoRaWAN end-devices can choose various different data rates from a
    menu of available rates (dependent on the frequencies in use).  It is
@@ -333,7 +333,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 6]
+Farrell & Yegin          Expires April 21, 2017                 [Page 6]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -346,7 +346,7 @@ Internet-Draft                lora overview                 October 2016
    Some MAC commands are initiated by the network server.  For example,
    one command allows the network server to ask an end-device to reduce
    it's duty-cycle to only use a proportion of the maximum allowed in a
-   region.  Another, allows the network server to query the end-device's
+   region.  Another allows the network server to query the end-device's
    power status with the response from the end-device specifying whether
    it has an external power source or is battery powered (in which case
    a relative battery level is also sent to the network server).
@@ -360,7 +360,7 @@ Internet-Draft                lora overview                 October 2016
    A LoRaWAN network has a short network identifer ("NwkID") which is a
    seven bit value.  A private network (common for LoRaWAN) can use the
    value zero.  If a network wishes to support "foreign" end-devices
-   then the NwkID needs to be registered with the LoRA alliance, in
+   then the NwkID needs to be registered with the LoRA Alliance, in
    which case the NwkID is the seven least significant bits of a
    registered 24-bit NetID.  (Note however, that the methods for
    "roaming" are currently being enhanced within the LoRA Alliance, so
@@ -389,7 +389,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 7]
+Farrell & Yegin          Expires April 21, 2017                 [Page 7]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -445,7 +445,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 8]
+Farrell & Yegin          Expires April 21, 2017                 [Page 8]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -469,24 +469,21 @@ Internet-Draft                lora overview                 October 2016
 
 6.  Security Considerations
 
-   In this section we describe the use of cryptography and other
-   security considerations arising.  This section is not intended as a
-   full specification for LoRaWAN security but to be sufficient so that
-   future IETF specifications can encompass the required security
-   considerations.  The emphasis is on describing the externally visible
-   characteristics of LoRaWAN so this is not intended to be a full
-   security analysis.
+   In this section we describe the use of cryptography in LoRaWAN.  This
+   section is not intended as a full specification but to be sufficient
+   so that future IETF specifications can encompass the required
+   security considerations.  The emphasis is on describing the
+   externally visible characteristics of LoRaWAN.
 
 6.1.  Payload Encryption and Data Integrity
 
    All payloads are encrypted and have data integrity.  Frame options
    (used for MAC commands) when sent as a payload (port zero) are
    therefore protected.  MAC commands piggy-backed as frame options
-   ("FOpts") are however sent in clear.
-
-   Since MAC commands may be sent as options and not only as payload,
-   any values sent are visible to a passive attacker but are not
-   malleable for an active attacker due to the use of the MIC.
+   ("FOpts") are however sent in clear.  Since MAC commands may be sent
+   as options and not only as payload, any values sent in that manner
+   are visible to a passive attacker but are not malleable for an active
+   attacker due to the use of the MIC.
 
    For LoRaWAN version 1.0.x, the NetWSkey session key is used to
    provide data integrity between the end-device and the network server.
@@ -498,28 +495,20 @@ Internet-Draft                lora overview                 October 2016
    (MIC) calculated using AES-CMAC calculated over the ciphertext
    payload and other headers and using the NwkSkey.
 
+   Payloads are encrypted using AES-128, with a counter-mode dervived
+   from IEEE 802.15.4 using the AppSKey.
 
 
 
-Farrell & Yegin          Expires April 20, 2017                 [Page 9]
+
+Farrell & Yegin          Expires April 21, 2017                 [Page 9]
 
 Internet-Draft                lora overview                 October 2016
 
 
-   Payloads are encrypted using AES-128, with a counter-mode dervived
-   from IEEE 802.15.4 using the AppSKey.
-
    Gateways are not expected to be provided with the AppSKey or NwkSKey,
    all of the infrastructure-side cryptography happens in (or "behind")
    the network server.
-
-   This way of providing data integrity and confidentiality differs from
-   today's more common IETF case where an authenticated encryption with
-   additional data (AEAD) mode of operation [RFC5116] provides both data
-   integrity and confidentiality based on the same session key.  The
-   goal of the current design is to efficiently support cases where the
-   endpoints for the LoRaWAN data integrity and confidentiality services
-   might not be operated by the same entities.
 
 6.2.  Key Derivation
 
@@ -547,77 +536,6 @@ Internet-Draft                lora overview                 October 2016
    again using an ECB mode aes-encrypt operation, with the plaintext
    input being a maximum of 16 octets.
 
-6.3.  Cryptographic Optimisations
-
-   The use of cryptography in the LoRaWAN MAC layer was designed to be
-   optimised for the known use-cases and kinds of equipment expected to
-   be used.  Given the different requirements posed, that leads to a
-   design that differs from the set of cryptographi best current
-   practices typically seen in IETF protocols.
-
-
-
-Farrell & Yegin          Expires April 20, 2017                [Page 10]
-
-Internet-Draft                lora overview                 October 2016
-
-
-   In particular: payload length is exposed as there is no padding
-   mechanism today; AEAD modes are not used; a standard key derivation
-   function (KDF) is not used; there is no concept of re-keying separate
-   from the Join-procedure; there is no concept of algorithm agility
-   other than via changes to the overall LoRaWAN MAC protocol and
-   aspects of the replay-protection use what might in other contexts be
-   considered short counters/nonces.  Theses issues remain under
-   disussion withinn the LoRa alliance and over time one can expect
-   better convergence between the requirements faced in the LPWAN arena
-   with those more familiar in the IETF context.
-
-   That said, the fact that the LoRaWAN MAC layer does protect all
-   payloads is an excellent example of being consistent with the
-   Internet Architecture Board's recommendation on Internet
-   confidentiality [iab-confid] which calls for these services to be
-   applied at multiple layers.  It is notable that that is also fully
-   consistent with new IETF work at other layers, e.g. both the proposed
-   QUIC protocol [I-D.hamilton-quic-transport-protocol] and LoRaWAN
-   embed confidentiality and integrity into the protocol as first class
-   features from the start.
-
-6.4.  Privacy
-
-   Sending the DevEUI in clear during the join procedure allows the end-
-   device to be (re-)identified by an eavesdropper.  That said, the
-   DevAddr can be entirely different after each run of the join-
-   procedure giving implementations some scope to partially enhance
-   privacy.
-
-   The absence of padding could expose private inforation, or the
-   existence of private information if not protected at other layers.
-   This may need to be considered when layering IP over LoRaWAN (or
-   other LPWAN technologies).
-
-6.5.  Software Update
-
-   As with all LPWAN technologies under consideration, LoRaWAN has no
-   built-in handling of software update.  It is unlikely that such
-   updates would be considered in scope of the LPWAN WG, but given the
-   IAB recently sponsored a workshop on IoT software update
-   [I-D.farrell-iotsu-workshop] it may be worthwhile to at least
-   consider whether the WG might address this issue.  (Full disclosure:
-   one of the authors of this draft (SF) hosted the IoTSU workshop.)
-
-
-
-
-
-
-
-
-Farrell & Yegin          Expires April 20, 2017                [Page 11]
-
-Internet-Draft                lora overview                 October 2016
-
-
 7.  IANA Considerations
 
    There are no IANA considerations related to this memo.
@@ -632,28 +550,31 @@ Internet-Draft                lora overview                 October 2016
    Foundation Ireleand funded CONNECT centre
    <https://connectcentre.ie/>.
 
-9.  Informative References
 
-   [RFC5116]  McGrew, D., "An Interface and Algorithms for Authenticated
-              Encryption", RFC 5116, DOI 10.17487/RFC5116, January 2008,
-              <http://www.rfc-editor.org/info/rfc5116>.
+
+
+
+
+
+
+Farrell & Yegin          Expires April 21, 2017                [Page 10]
+
+Internet-Draft                lora overview                 October 2016
+
+
+9.  Contributors
+
+   The following members of the LoRa Alliance reviewed this draft and
+   contributed (much more than SF) to the definition of LoRaWAN.
+
+      Name, Affiliation, email (optional)
+
+10.  Informative References
 
    [I-D.vilajosana-lpwan-lora-hc]
               Vilajosana, X., Dohler, M., and A. Yegin, "Transmission of
               IPv6 Packets over LoRaWAN", draft-vilajosana-lpwan-lora-
               hc-00 (work in progress), July 2016.
-
-   [I-D.farrell-iotsu-workshop]
-              Tschofenig, H. and S. Farrell, "Report from the Internet
-              of Things (IoT) Software Update (IoTSU) Workshop 2016",
-              draft-farrell-iotsu-workshop-01 (work in progress),
-              October 2016.
-
-   [I-D.hamilton-quic-transport-protocol]
-              Hamilton, R., Iyengar, J., Swett, I., and A. Wilk, "QUIC:
-              A UDP-Based Multiplexed and Secure Transport", draft-
-              hamilton-quic-transport-protocol-00 (work in progress),
-              July 2016.
 
    [LoRaSpec]
               LoRa Alliance, "LoRaWAN Specification Version V1.0.2", Nov
@@ -663,23 +584,6 @@ Internet-Draft                lora overview                 October 2016
               LoRa Alliance, "LoRaWAN Specification Version V1.0", Jan
               2015, <https://www.lora-alliance.org/portals/0/specs/
               LoRaWAN%20Specification%201R0.pdf>.
-
-
-
-
-
-
-Farrell & Yegin          Expires April 20, 2017                [Page 12]
-
-Internet-Draft                lora overview                 October 2016
-
-
-   [iab-confid]
-              Internet Architecture Board, "IAB Statement on Internet
-              Confidentiality", Nov 2014,
-              <https://www.iab.org/documents/correspondence-reports-
-              documents/2014-2/iab-statement-on-internet-
-              confidentiality/>.
 
 Authors' Addresses
 
@@ -709,20 +613,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Farrell & Yegin          Expires April 20, 2017                [Page 13]
+Farrell & Yegin          Expires April 21, 2017                [Page 11]
