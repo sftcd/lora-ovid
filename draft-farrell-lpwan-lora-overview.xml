@@ -157,24 +157,25 @@ end-device or a group of end-devices (considering multicasting). </t>
 	<section anchor="spectrum" title="Radio Spectrum">
 
 	<t>LoRaWAN radios make use of ISM bands, for example, 433MHz and 868MHz
-within the European Union and 915Mhz in the Americas.</t>
+within the European Union and 915MHz in the Americas.</t>
 
 	<t>The end-device changes channel in a pseudo-random fashion for every
 transmission to help make the system more robust to interference.</t>
 
 	<t>As with other LPWAN radio technologies, LoRaWAN end-devices respect the
-frequency, power and maximum transmit duty cycle requirements for the sub-band used and local
-regulations. In many cases, this means an end-device only transmitting for 1%
- of the time. In some cases the LoRaWAN specification calls for end-devices
-to transmit less often than is called for by the ISM band regulations in
-order to avoid congestion. 
-</t>
+frequency, power and maximum transmit duty cycle requirements for the sub-band
+used imposted by local regulators. In most cases, this means an end-device only
+transmitting for 1% of the time, as specified by ISM band regulattions. And in
+some cases the LoRaWAN specification calls for end-devices to transmit less
+often than is called for by the ISM band regulations in order to avoid
+congestion.  </t>
 
       <t>
        <xref target="fig1"/> below shows that after a transmission slot a Class A device
 turns on its receiver for two short receive windows that are offset from
 the end of the transmission window. The frequencies and data rate chosen
-for these receive windows depend on those used for the transmit window.
+for the first of these receive windows depends on those used for the transmit window.
+The frequency and data-rate for the second receive window are configurable.
 If a downlink message preamble is detected during a receive window, then
 the end-device keeps the radio on in order to receive the frame.
 </t>
@@ -393,7 +394,7 @@ out-of-band means given the nature of LoRaWAN networks.
 <texttable anchor="table-nominal" title="Values required for nominal operation">
     <ttcol align='left'>Value</ttcol>
     <ttcol align='left'>Description</ttcol>
-<c>DevAddr</c> <c>DevAddr (32-bits) =  NwkId (7-bits) + device-specific address (25 bits)</c>
+<c>DevAddr</c> <c>DevAddr (32-bits) =  NwkId (7-bits) + device-specific network address (25 bits)</c>
 <c>AppEUI </c> <c> IEEE EUI64 naming the application</c>
 <c>NwkSKey </c> <c> 128 bit network session key for use with AES</c>
 <c>AppSKey </c> <c> 128 bit application session key for use with AES</c> 
@@ -688,6 +689,7 @@ and contributed (much more than SF) to the definition of LoRaWAN.</t>
 
 <t><list>
 	<t>Name, Affiliation, email (optional)</t>
+	<t>Chun-Yeow Yeoh, VADS LYFE SDN BHD, yeow@tmrnd.com.my</t>
 </list></t>
 </section>
 
