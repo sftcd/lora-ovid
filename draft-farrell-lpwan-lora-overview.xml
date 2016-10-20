@@ -141,7 +141,7 @@ A can only receive downlink messages at predetermined timeslots after
 each uplink message transmission. Class B allows the end-device to
 receive downlink messages at periodically scheduled timeslots. Class C
 allows receipt of downlink messages at anytime. Class selection is
-based on the end-devices's application use case and its power supply.
+based on the end-devices' application use case and its power supply.
 </t>
 
 	<t>Uplink message: refers to communications from end-device to network server via one or
@@ -164,8 +164,8 @@ transmission to help make the system more robust to interference.</t>
 
 	<t>As with other LPWAN radio technologies, LoRaWAN end-devices respect the
 frequency, power and maximum transmit duty cycle requirements for the sub-band
-used imposted by local regulators. In most cases, this means an end-device only
-transmitting for 1% of the time, as specified by ISM band regulattions. And in
+used imposed by local regulators. In most cases, this means an end-device only
+transmitting for 1% of the time, as specified by ISM band regulations. And in
 some cases the LoRaWAN specification calls for end-devices to transmit less
 often than is called for by the ISM band regulations in order to avoid
 congestion.  </t>
@@ -200,7 +200,7 @@ timeouts on parts of that process.
 </figure>
 
 	<t>Given the different regional requirements the detailed specification for the
-LoRaWan physical layer (taking up more than 30 pages of
+LoRaWAN physical layer (taking up more than 30 pages of
 the specification) is not reproduced here.  Instead
 and mainly to illustrate the kinds of issue encountered, in 
 <xref target="table-ism868"/> we present some of the default settings for one
@@ -340,7 +340,7 @@ bands assigned for the band and region.</t>
 
     <section title="Names and Addressing" anchor= "sec_lora_addressing">
 
-	<t>A LoRaWAN network has a short network identifer ("NwkID") which is a 
+	<t>A LoRaWAN network has a short network identifier ("NwkID") which is a 
 seven bit value.  A private network (common for LoRaWAN) can use the value 
 zero. If
 a network wishes to support "foreign" end-devices then the NwkID
@@ -380,7 +380,7 @@ updated to refelect R1.1 when the I-D is.]]</t>
 	<t>In addition, a device needs to have two symmetric session
 keys, one for protecting network artefacts (port=0), the NwkSKey,
 and another for protecting appliction layer traffic, the 
-AppSKey. Both keys are used for 128 bit AES cryptgraphic
+AppSKey. Both keys are used for 128 bit AES cryptpgraphic
 operations. (See <xref target="sec-cons"/> for details.)</t>
 
 	<t>So, one option is for an end-device to have all of the above,
@@ -442,7 +442,7 @@ in <xref target="table-nominal"/>.</t>
 	<t>There is some special handling related to which channels 
 to use and for multiple transmissions for the join-request which
 is intended to ensure a successful join in as many cases as
-possible. Join-request and Join-accept messages also incldue
+possible. Join-request and Join-accept messages also include
 some random values (nonces) to both provide some replay 
 protection and to help ensure the session keys are unique
 per run of the join procedure. If a Join-request fails validation, then no Join-accept
@@ -478,7 +478,7 @@ due to the use of the MIC.</t>
 to provide data integrity between the end-device and the network
 server. The AppSKey is used to provide data confidentiality between
 the end-device and network server, or to the application "behind"
-the network server, depening on the implementation of the 
+the network server, depending on the implementation of the 
 network. </t>
 
 	<t>All MAC layer messages have an outer 32-bit Message Integrity Code (MIC)
@@ -486,7 +486,7 @@ calculated using AES-CMAC calculated over the ciphertext payload and other
 headers and using the NwkSkey.</t>
 
 	<t>Payloads are encrypted using 
-AES-128, with a counter-mode dervived from IEEE 802.15.4 using the
+AES-128, with a counter-mode derived from IEEE 802.15.4 using the
 AppSKey.</t>
 
 	<t>Gateways are not expected to be provided with the AppSKey or NwkSKey,

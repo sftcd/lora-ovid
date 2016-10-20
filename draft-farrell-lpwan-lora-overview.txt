@@ -5,8 +5,8 @@
 lpwan                                                         S. Farrell
 Internet-Draft                                    Trinity College Dublin
 Intended status: Informational                                  A. Yegin
-Expires: April 22, 2017                                         Actility
-                                                        October 19, 2016
+Expires: April 23, 2017                                         Actility
+                                                        October 20, 2016
 
 
                             LoRaWAN Overview
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 22, 2017.
+   This Internet-Draft will expire on April 23, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 1]
+Farrell & Yegin          Expires April 23, 2017                 [Page 1]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 2]
+Farrell & Yegin          Expires April 23, 2017                 [Page 2]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -150,7 +150,7 @@ Internet-Draft                lora overview                 October 2016
       each uplink message transmission.  Class B allows the end-device
       to receive downlink messages at periodically scheduled timeslots.
       Class C allows receipt of downlink messages at anytime.  Class
-      selection is based on the end-devices's application use case and
+      selection is based on the end-devices' application use case and
       its power supply.
 
    o  Uplink message: refers to communications from end-device to
@@ -165,7 +165,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 3]
+Farrell & Yegin          Expires April 23, 2017                 [Page 3]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -180,9 +180,9 @@ Internet-Draft                lora overview                 October 2016
 
    As with other LPWAN radio technologies, LoRaWAN end-devices respect
    the frequency, power and maximum transmit duty cycle requirements for
-   the sub-band used imposted by local regulators.  In most cases, this
+   the sub-band used imposed by local regulators.  In most cases, this
    means an end-device only transmitting for 1% of the time, as
-   specified by ISM band regulattions.  And in some cases the LoRaWAN
+   specified by ISM band regulations.  And in some cases the LoRaWAN
    specification calls for end-devices to transmit less often than is
    called for by the ISM band regulations in order to avoid congestion.
 
@@ -211,7 +211,7 @@ Internet-Draft                lora overview                 October 2016
         Figure 1: LoRaWAN Class A transmission and reception window
 
    Given the different regional requirements the detailed specification
-   for the LoRaWan physical layer (taking up more than 30 pages of the
+   for the LoRaWAN physical layer (taking up more than 30 pages of the
    specification) is not reproduced here.  Instead and mainly to
    illustrate the kinds of issue encountered, in Table 1 we present some
    of the default settings for one ISM band (without fully explaining
@@ -221,7 +221,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 4]
+Farrell & Yegin          Expires April 23, 2017                 [Page 4]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -277,7 +277,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 5]
+Farrell & Yegin          Expires April 23, 2017                 [Page 5]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -333,7 +333,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 6]
+Farrell & Yegin          Expires April 23, 2017                 [Page 6]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -357,7 +357,7 @@ Internet-Draft                lora overview                 October 2016
 
 5.  Names and Addressing
 
-   A LoRaWAN network has a short network identifer ("NwkID") which is a
+   A LoRaWAN network has a short network identifier ("NwkID") which is a
    seven bit value.  A private network (common for LoRaWAN) can use the
    value zero.  If a network wishes to support "foreign" end-devices
    then the NwkID needs to be registered with the LoRA Alliance, in
@@ -380,7 +380,7 @@ Internet-Draft                lora overview                 October 2016
    In addition, a device needs to have two symmetric session keys, one
    for protecting network artefacts (port=0), the NwkSKey, and another
    for protecting appliction layer traffic, the AppSKey.  Both keys are
-   used for 128 bit AES cryptgraphic operations.  (See Section 6 for
+   used for 128 bit AES cryptpgraphic operations.  (See Section 6 for
    details.)
 
    So, one option is for an end-device to have all of the above, plus
@@ -389,7 +389,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 7]
+Farrell & Yegin          Expires April 23, 2017                 [Page 7]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -445,7 +445,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 8]
+Farrell & Yegin          Expires April 23, 2017                 [Page 8]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -460,7 +460,7 @@ Internet-Draft                lora overview                 October 2016
    There is some special handling related to which channels to use and
    for multiple transmissions for the join-request which is intended to
    ensure a successful join in as many cases as possible.  Join-request
-   and Join-accept messages also incldue some random values (nonces) to
+   and Join-accept messages also include some random values (nonces) to
    both provide some replay protection and to help ensure the session
    keys are unique per run of the join procedure.  If a Join-request
    fails validation, then no Join-accept message (indeed no message at
@@ -489,19 +489,19 @@ Internet-Draft                lora overview                 October 2016
    provide data integrity between the end-device and the network server.
    The AppSKey is used to provide data confidentiality between the end-
    device and network server, or to the application "behind" the network
-   server, depening on the implementation of the network.
+   server, depending on the implementation of the network.
 
    All MAC layer messages have an outer 32-bit Message Integrity Code
    (MIC) calculated using AES-CMAC calculated over the ciphertext
    payload and other headers and using the NwkSkey.
 
-   Payloads are encrypted using AES-128, with a counter-mode dervived
+   Payloads are encrypted using AES-128, with a counter-mode derived
    from IEEE 802.15.4 using the AppSKey.
 
 
 
 
-Farrell & Yegin          Expires April 22, 2017                 [Page 9]
+Farrell & Yegin          Expires April 23, 2017                 [Page 9]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -557,7 +557,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 22, 2017                [Page 10]
+Farrell & Yegin          Expires April 23, 2017                [Page 10]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -613,4 +613,4 @@ Authors' Addresses
 
 
 
-Farrell & Yegin          Expires April 22, 2017                [Page 11]
+Farrell & Yegin          Expires April 23, 2017                [Page 11]
