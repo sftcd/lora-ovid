@@ -91,9 +91,9 @@ multiple instances of the same uplink message from an end-device.</t>
 
 <t>To
 maximize both battery life of end-devices and overall network capacity, the
-LoRaWAN network infrastructure manages the data rate and RF output for each
+LoRaWAN network infrastructure manages the data rate and RF output power for each
 end-device individually by means of an adaptive data rate (ADR) scheme.
-End-devices may transmit on any channel available at any time, using any
+End-devices may transmit on any channel allowed by local regulation at any time, using any
 of the currently available data rates.  </t>
 
 <t>This memo provides an overview of the LoRaWAN technology for
@@ -111,6 +111,29 @@ version 1.0 is available at <xref target="LoRaSpec1.0"/>)
 
 	<section title="Terminology">
 
+	<t>This section introduces some LoRaWAN terms.
+<xref target="arch"/> shows the entities involved in a 
+LoRaWAN network. </t>
+
+<figure anchor="arch" title="LoRaWAN architecture" >
+<artwork><![CDATA[
++----------+ 
+|End-device| * * * 
++----------+       *   +---------+ 
+                     * | Gateway +---+ 
++----------+       *   +---------+   |   +---------+  
+|End-device| * * *                   +---+ Network +--- Application
++----------+       *                 |   | Server  |   
+                     * +---------+   |   +---------+   
++----------+       *   | Gateway +---+
+|End-device| * * *   * +---------+    
++----------+         
+    Key: *      LoRaWAN MAC Radio 
+         +---+  Internet connectivity
+  ]]></artwork>
+</figure> 
+	
+
 <!--
 	  <t> [[Not sure if 2119 terms will be needed. Leave it here for now.]] The key
 words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
@@ -119,7 +142,6 @@ interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t>
 -->
 	
 
-	<t>This section introduces some LoRaWAN terms.</t>
 <t><list style="symbols">
 
 	<t>End-device: a LoRa client device, sometimes called a mote. Communicates with gateways.</t>
@@ -128,20 +150,8 @@ interpreted as described in <xref target="RFC2119">RFC 2119</xref>.  </t>
 	Communicates with end-devices and, via the Internet, with a network server. </t>
 
 	<t>Network Server: The Network Server (NS) terminates the LoRaWAN MAC layer
-for the devices connected to the network. It is the center of the star
+for the end-devices connected to the network. It is the center of the star
 topology.
-</t>
-
-<t>
-Classes A, B and C define different device capabilities and modes
-of operation for end-devices. End-devices can transmit uplink
-message at any time in any mode of operation (so long as e.g., ISM band
-restrictions are honoured). An end-device in Class
-A can only receive downlink messages at predetermined timeslots after
-each uplink message transmission. Class B allows the end-device to
-receive downlink messages at periodically scheduled timeslots. Class C
-allows receipt of downlink messages at anytime. Class selection is
-based on the end-devices' application use case and its power supply.
 </t>
 
 	<t>Uplink message: refers to communications from end-device to network server via one or
@@ -149,6 +159,26 @@ more gateways. </t>
 
 	<t>Downlink message: refers to communications from network server via one gateway to a single
 end-device or a group of end-devices (considering multicasting). </t>
+
+	<t>Application: refers to application layer code both on the end-device
+and running "behind" the network server. For LoRaWAN, there will generally 
+only be one application running on most end-devices. Interfaces between
+the network server and application are not further described here.</t>
+
+<t>
+Classes A, B and C define different device capabilities and modes
+of operation for end-devices. End-devices can transmit uplink
+messages at any time in any mode of operation (so long as e.g., ISM band
+restrictions are honoured). An end-device in Class
+A can only receive downlink messages at predetermined timeslots after
+each uplink message transmission. Class B allows the end-device to
+receive downlink messages at periodically scheduled timeslots. Class C
+allows receipt of downlink messages at anytime. Class selection is
+based on the end-devices' application use case and its power supply.
+(While Classes B and C are not further described here, readers may have seen
+those terms elsewhere so we include them for clarity.)
+</t>
+
 
 </list></t>
 
@@ -160,18 +190,19 @@ end-device or a group of end-devices (considering multicasting). </t>
 within the European Union and 915MHz in the Americas.</t>
 
 	<t>The end-device changes channel in a pseudo-random fashion for every
-transmission to help make the system more robust to interference.</t>
+transmission to help make the system more robust to interference and/or to
+conform to local regulations.</t>
 
 	<t>As with other LPWAN radio technologies, LoRaWAN end-devices respect the
 frequency, power and maximum transmit duty cycle requirements for the sub-band
-used imposed by local regulators. In most cases, this means an end-device only
+imposed by local regulators. In most cases, this means an end-device is only
 transmitting for 1% of the time, as specified by ISM band regulations. And in
 some cases the LoRaWAN specification calls for end-devices to transmit less
 often than is called for by the ISM band regulations in order to avoid
 congestion.  </t>
 
       <t>
-       <xref target="fig1"/> below shows that after a transmission slot a Class A device
+       <xref target="trans"/> below shows that after a transmission slot a Class A device
 turns on its receiver for two short receive windows that are offset from
 the end of the transmission window. The frequencies and data rate chosen
 for the first of these receive windows depends on those used for the transmit window.
@@ -187,7 +218,7 @@ timeouts on parts of that process.
 </t>
 
 
-<figure anchor="fig1" title="LoRaWAN Class A transmission and reception window">
+<figure anchor="trans" title="LoRaWAN Class A transmission and reception window">
 <artwork>
 |----------------------------|         |--------|     |--------|
 |             Tx             |         |   Rx   |     |   Rx   |
@@ -303,7 +334,7 @@ downlink acks go missing.</t>
 
 	<t>There are 16 (or 32) bit frame counters maintained in each direction
 that are incremented on each transmission (but not re-transmissions)
-that are not re-used. When the device supports a 32 bit counter, then
+that are not re-used for a given key. When the device supports a 32 bit counter, then
 only the least significant 16 bits are sent in the MAC header, but
 all 32 bits are used in cryptographic operations. (If an end-device
 only supports a 16 bit counter internally, then the topmost 16 bits
@@ -332,7 +363,7 @@ battery level is also sent to the network server).</t>
 	<t>The network server can also inform an end-device
 about channel assignments (mid-point frequencies and data
 rates). Of course, these must also remain within the
-bands assigned for the band and region.</t>
+bands assigned by local regulation.</t>
 
 
 
@@ -447,7 +478,7 @@ some random values (nonces) to both provide some replay
 protection and to help ensure the session keys are unique
 per run of the join procedure. If a Join-request fails validation, then no Join-accept
 message (indeed no message at all) is returned to the end-device.
-If an end-device is reset then it should end up in a
+For example, if an end-device is factory-reset then it should end up in a
 state in which it can re-do the join procedure. </t>
 
 
@@ -474,7 +505,7 @@ only as payload, any values sent in that manner are visible to a passive
 attacker but are not malleable for an active attacker
 due to the use of the MIC.</t>
 
-	<t>For LoRaWAN version 1.0.x, the NetWSkey session key is used
+	<t>For LoRaWAN version 1.0.x, the NWkSkey session key is used
 to provide data integrity between the end-device and the network
 server. The AppSKey is used to provide data confidentiality between
 the end-device and network server, or to the application "behind"
@@ -690,6 +721,9 @@ and contributed (much more than SF) to the definition of LoRaWAN.</t>
 <t><list>
 	<t>Name, Affiliation, email (optional)</t>
 	<t>Chun-Yeow Yeoh, VADS LYFE SDN BHD, yeow@tmrnd.com.my</t>
+	<t>Olivier Hersent, Actility, olivier.hersent@actility.com</t>
+	<t>Dave Kjendal, Senet Inc, dkjendal@senetco.com</t>
+	<t>Paul Duffy, Cisco, paduffy@cisco.com</t>
 </list></t>
 </section>
 
