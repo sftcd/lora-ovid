@@ -79,7 +79,7 @@ Table of Contents
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
    9.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  11
-   10. Informative References  . . . . . . . . . . . . . . . . . . .  12
+   10. Informative References  . . . . . . . . . . . . . . . . . . .  11
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
 
 1.  Introduction
@@ -583,8 +583,6 @@ Internet-Draft                lora overview                 October 2016
 
    The authors re-used some text from [I-D.vilajosana-lpwan-lora-hc]
 
-   Thanks to [your name here] for comments.
-
    Stephen Farrell's work on this memo was supported by the Science
    Foundation Ireleand funded CONNECT centre
    <https://connectcentre.ie/>.
@@ -606,10 +604,12 @@ Internet-Draft                lora overview                 October 2016
 
       Joachim Ernst, Swisscom Broadcast Ltd, joachim.ernst@swisscom.com
 
+10.  Informative References
 
-
-
-
+   [I-D.vilajosana-lpwan-lora-hc]
+              Vilajosana, X., Dohler, M., and A. Yegin, "Transmission of
+              IPv6 Packets over LoRaWAN", draft-vilajosana-lpwan-lora-
+              hc-00 (work in progress), July 2016.
 
 
 
@@ -617,13 +617,6 @@ Farrell & Yegin          Expires April 28, 2017                [Page 11]
 
 Internet-Draft                lora overview                 October 2016
 
-
-10.  Informative References
-
-   [I-D.vilajosana-lpwan-lora-hc]
-              Vilajosana, X., Dohler, M., and A. Yegin, "Transmission of
-              IPv6 Packets over LoRaWAN", draft-vilajosana-lpwan-lora-
-              hc-00 (work in progress), July 2016.
 
    [LoRaSpec]
               LoRa Alliance, "LoRaWAN Specification Version V1.0.2", Nov
@@ -651,6 +644,13 @@ Authors' Addresses
    FR
 
    Email: alper.yegin@actility.com
+
+
+
+
+
+
+
 
 
 
