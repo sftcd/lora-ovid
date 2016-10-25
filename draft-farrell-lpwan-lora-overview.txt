@@ -5,8 +5,8 @@
 lpwan                                                         S. Farrell
 Internet-Draft                                    Trinity College Dublin
 Intended status: Informational                                  A. Yegin
-Expires: April 27, 2017                                         Actility
-                                                        October 24, 2016
+Expires: April 28, 2017                                         Actility
+                                                        October 25, 2016
 
 
                             LoRaWAN Overview
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 27, 2017.
+   This Internet-Draft will expire on April 28, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 1]
+Farrell & Yegin          Expires April 28, 2017                 [Page 1]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -84,10 +84,6 @@ Table of Contents
 
 1.  Introduction
 
-   [[Comments to be addressed before publication are in double square
-   brackets like this one.  Note to self: clean out the xml comments
-   from the source file before publication.]]
-
    LoRaWAN is a wireless technology for long-range low-power low-data-
    rate applications developed by the LoRa Alliance, a membership
    consortium.  <https://www.lora-alliance.org/> LoRaWAN networks are
@@ -106,18 +102,17 @@ Table of Contents
 
    To maximize both battery life of end-devices and overall network
    capacity, the LoRaWAN network infrastructure manages the data rate
-
-
-
-Farrell & Yegin          Expires April 27, 2017                 [Page 2]
-
-Internet-Draft                lora overview                 October 2016
-
-
    and RF output power for each end-device individually by means of an
    adaptive data rate (ADR) scheme.  End-devices may transmit on any
    channel allowed by local regulation at any time, using any of the
    currently available data rates.
+
+
+
+Farrell & Yegin          Expires April 28, 2017                 [Page 2]
+
+Internet-Draft                lora overview                 October 2016
+
 
    This memo provides an overview of the LoRaWAN technology for the
    Internet community, but the definitive specification [LoRaSpec] is
@@ -162,17 +157,18 @@ Internet-Draft                lora overview                 October 2016
    o  Uplink message: refers to communications from end-device to
       network server via one or more gateways.
 
-
-
-
-Farrell & Yegin          Expires April 27, 2017                 [Page 3]
-
-Internet-Draft                lora overview                 October 2016
-
-
    o  Downlink message: refers to communications from network server via
       one gateway to a single end-device or a group of end-devices
       (considering multicasting).
+
+
+
+
+
+Farrell & Yegin          Expires April 28, 2017                 [Page 3]
+
+Internet-Draft                lora overview                 October 2016
+
 
    o  Application: refers to application layer code both on the end-
       device and running "behind" the network server.  For LoRaWAN,
@@ -219,15 +215,17 @@ Internet-Draft                lora overview                 October 2016
    preamble is detected during a receive window, then the end-device
    keeps the radio on in order to receive the frame.
 
+   End-devices can only transmit a subsequent uplink frame after the end
+   of the associated receive windows.  When a device joins a LoRaWAN
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 4]
+
+
+Farrell & Yegin          Expires April 28, 2017                 [Page 4]
 
 Internet-Draft                lora overview                 October 2016
 
 
-   End-devices can only transmit a subsequent uplink frame after the end
-   of the associated receive windows.  When a device joins a LoRaWAN
    network (see Section 4 for details), there are similar timeouts on
    parts of that process.
 
@@ -277,7 +275,9 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 5]
+
+
+Farrell & Yegin          Expires April 28, 2017                 [Page 5]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -333,7 +333,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 6]
+Farrell & Yegin          Expires April 28, 2017                 [Page 6]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -389,7 +389,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 7]
+Farrell & Yegin          Expires April 28, 2017                 [Page 7]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -445,7 +445,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 8]
+Farrell & Yegin          Expires April 28, 2017                 [Page 8]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -501,7 +501,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                 [Page 9]
+Farrell & Yegin          Expires April 28, 2017                 [Page 9]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -557,7 +557,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                [Page 10]
+Farrell & Yegin          Expires April 28, 2017                [Page 10]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -613,7 +613,7 @@ Internet-Draft                lora overview                 October 2016
 
 
 
-Farrell & Yegin          Expires April 27, 2017                [Page 11]
+Farrell & Yegin          Expires April 28, 2017                [Page 11]
 
 Internet-Draft                lora overview                 October 2016
 
@@ -669,4 +669,4 @@ Authors' Addresses
 
 
 
-Farrell & Yegin          Expires April 27, 2017                [Page 12]
+Farrell & Yegin          Expires April 28, 2017                [Page 12]
