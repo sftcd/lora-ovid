@@ -6,7 +6,7 @@ DATE=`date +%s`
 all: core upload
 
 core:
-	$(XML2RFC) draft-farrell-lpwan-lora-overview.xml draft-farrell-lpwan-lora-overview-00.txt
+	$(XML2RFC) draft-farrell-lpwan-lora-overview.xml draft-farrell-lpwan-lora-overview.txt
 
 upload:
 	scp draft-farrell-lpwan-lora-overview.txt  down.dsg.cs.tcd.ie:/var/www/misc/draft-farrell-lpwan-lora-overview.txt
@@ -18,5 +18,5 @@ backuup:
 	cp draft-farrell-lpwan-lora-overview.xml backups/draft-farrell-lpwan-lora-overview-$(DATE).xml
 
 clean:
-	rm -f   draft-farrell-lpwan-lora-overview-00.txt *~
+	rm -f   draft-farrell-lpwan-lora-overview.txt *~
 

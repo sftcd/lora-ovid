@@ -9,7 +9,7 @@
 <?rfc toc="yes"?>
 <?rfc comments="yes"?>
 <?rfc inline="yes" ?>
-<rfc category="info" ipr="trust200902" docName="draft-farrell-lpwan-lora-overview-00">
+<rfc category="info" ipr="trust200902" docName="draft-farrell-lpwan-lora-overview-01">
 <front>
    <title abbrev="lora overview">
      LoRaWAN Overview 
@@ -124,8 +124,8 @@ LoRaWAN network. </t>
 +----------+       *   | Gateway +---+
 |End-device| * * *   * +---------+    
 +----------+         
-    Key: *      LoRaWAN MAC Radio 
-         +---+  Internet connectivity
+    Key: *      LoRaWAN radio 
+         +---+  IP connectivity
   ]]></artwork>
 </figure> 
 	
@@ -136,18 +136,19 @@ LoRaWAN network. </t>
 	<t>End-device: a LoRa client device, sometimes called a mote. Communicates with gateways.</t>
 
 	<t>Gateway: a radio on the infrastructure-side, sometimes called a concentrator or base-station.
-	Communicates with end-devices and, via the Internet, with a network server. </t>
+	Communicates with end-devices and, via IP, with a network server. </t>
 
 	<t>Network Server: The Network Server (NS) terminates the LoRaWAN MAC layer
 for the end-devices connected to the network. It is the center of the star
 topology.
 </t>
 
-	<t>Uplink message: refers to communications from end-device to network server via one or
-more gateways. </t>
+	<t>Uplink message: refers to communications from end-device to network server or
+appliction via one or more gateways. </t>
 
-	<t>Downlink message: refers to communications from network server via one gateway to a single
-end-device or a group of end-devices (considering multicasting). </t>
+	<t>Downlink message: refers to communications from network server or
+application via one gateway to a single end-device or a group of end-devices
+(considering multicasting). </t>
 
 	<t>Application: refers to application layer code both on the end-device
 and running "behind" the network server. For LoRaWAN, there will generally 
@@ -194,7 +195,7 @@ congestion.  </t>
        <xref target="trans"/> below shows that after a transmission slot a Class A device
 turns on its receiver for two short receive windows that are offset from
 the end of the transmission window. The frequencies and data rate chosen
-for the first of these receive windows depends on those used for the transmit window.
+for the first of these receive windows match those used for the transmit window.
 The frequency and data-rate for the second receive window are configurable.
 If a downlink message preamble is detected during a receive window, then
 the end-device keeps the radio on in order to receive the frame.
@@ -563,6 +564,7 @@ and contributed (much more than SF) to the definition of LoRaWAN.</t>
 	<t>Paul Duffy, Cisco, paduffy@cisco.com</t>
 	<t>Joachim Ernst, Swisscom Broadcast Ltd, joachim.ernst@swisscom.com</t>
 	<t>Nicolas Sornin, Semtech, nsornin@semtech.com</t>
+	<t>Phillippe Christin, Orange, philippe.christin@orange.com</t>
 </list></t>
 </section>
 
